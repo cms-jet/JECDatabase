@@ -2,7 +2,8 @@
 
 # Create a tarball for a list of JEC text files
 
-CORRECTIONS="L1RC L1FastJet L2Relative L3Absolute L2L3Residual Uncertainty"
+CORRECTIONS="L1FastJet L2Relative L3Absolute Uncertainty" # for Summer16_25nsV1_MC
+#CORRECTIONS="L1RC L1FastJet L2Relative L3Absolute L2L3Residual Uncertainty"
 
 P=$1
 
