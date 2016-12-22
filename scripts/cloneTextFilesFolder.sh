@@ -3,7 +3,9 @@
 FROM=$1
 TO=$2
 
-for kind in MC DATA; do
+#for kind in MC DATA; do
+for kind in DATA; do
+#for kind in MC; do
     f=${FROM}_${kind}
     t=${TO}_${kind}
 
