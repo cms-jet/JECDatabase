@@ -4,7 +4,9 @@
 # ./copyL2Res.sh L2Res_SOURCE L2Res_DESTINATION L3Res_par0 L3Res_par1 L3Res_par2
 FROM=$1
 TO=$2
-Name_L2Res="Spring16_25ns_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Spring16_25ns_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
 L3Res_new=$3" "$4" "$5
 echo "Following L3Residuals are going to be used: $L3Res_new"
 echo "$Name_L2Res"
