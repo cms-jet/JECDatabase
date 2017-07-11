@@ -6,11 +6,21 @@ FROM=$1
 TO=$2
 #Name_L2Res="Spring16_25ns_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
 #Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
-Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
 #Name_L2Res="Summer16_03Feb2017BCD_V2_DATA_L2L3Residual_AK4PFchs.txt"
+
+#How it's called in files from L2Res analyser
+#MPF with const and loglin mix
+#Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
+#pt-balance with const and loglin mix
+#Name_L2Res="Summer16_03Feb2017_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
+#mix of pt-balance and MPF
+Name_L2Res="Summer16_03Feb2017_MPF_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
+
 L3Res_new=$3" "$4" "$5
 echo "Following L3Residuals are going to be used: $L3Res_new"
 echo "$Name_L2Res"
+#How it should be called
 Name_L2Res_official=${TO}_L2Residual
 Name_L2L3Res_official=${TO}_L2L3Residual
 
@@ -28,17 +38,17 @@ t=${TO}
 #     continue
 # fi
 
-# echo "Cloning $f to $t"
-# echo "File name $f/$Name_L2Res"
+echo "Cloning $f to $t"
+echo "File name $f/$Name_L2Res"
 # #cp -r $f $t
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PFchs.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PFPuppi.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PF.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4JPT.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4Calo.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PFchs.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PFPuppi.txt
-# cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PF.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PFchs.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PFPuppi.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4PF.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4JPT.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK4Calo.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PFchs.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PFPuppi.txt
+cp $f/${Name_L2Res} $t/${Name_L2Res_official}_AK8PF.txt
 
 L3Res_default="1 0.0000 0.0"
 echo "Change dummy L3Res ($L3Res_default) to real $L3Res_new values"
