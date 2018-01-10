@@ -13,9 +13,13 @@ TO=$2
 #MPF with const and loglin mix
 #Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 #pt-balance with const and loglin mix
-Name_L2Res="Summer16_03Feb2017_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Summer16_03Feb2017_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
 #mix of pt-balance and MPF
 #Name_L2Res="Summer16_03Feb2017_MPF_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
+
+#pt-balance with loglin 
+Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+
 
 L3Res_new=$3" "$4" "$5
 echo "Following L3Residuals are going to be used: $L3Res_new"
