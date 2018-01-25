@@ -18,7 +18,10 @@ TO=$2
 #Name_L2Res="Summer16_03Feb2017_MPF_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
 
 #pt-balance with loglin 
-Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
+
+#pt-balance with loglin for |eta|>1.3 and const for |eta|<1.3
+Name_L2Res="Summer16_07Aug2017_pT_Hybrid_Barrel_L2Residual_pythia8_AK4PFchs.txt"
 
 
 L3Res_new=$3" "$4" "$5
