@@ -1,0 +1,10 @@
+Handy reminders:
+
+Replace single algo MCTruth file across multiple directories
+=====
+find Fall17_*V4* -maxdepth 8 -type f -name "*L2Relative_AK8PFPuppi.txt" -exec cp L2Relative_AK8PUPPI_fixed.txt '{}'  \; -print
+
+Create all tarfiles in one go and move them over
+=====
+find -type d -name "Fall17_*V4*" -maxdepth 8 -exec ../scripts/createTarball.sh '{}'  \; -print
+find Fall17_*V4* -maxdepth 8 -type f -name "*tar.gz" -exec mv '{}' ../tarballs/. \; -print
