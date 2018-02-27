@@ -4,12 +4,12 @@
 # ./copyUncertantiesFromSourceToAllIOVs.sh
 
 #Some local path with txt files
-source_path=/home/karavdia/DesyCloud/presentations/Talks/trunk/JERC_converner/materials/20171101_JEC_uncert/
-source_uncer_name=Summer16_03Feb2017_V7_DATA_Uncertainty_AK4PFchs.txt
-source_uncer_source_name=Summer16_03Feb2017_V9_DATA_UncertaintySources_AK4PFchs.txt
+source_path=/afs/cern.ch/user/k/kirschen/public/
+source_uncer_name=Fall17_07Nov2017_V6M_DATA_UncertaintySources_AK4PFchs.txt
+source_uncer_source_name=Fall17_07Nov2017_V6M_DATA_UncertaintySources_AK4PFchs.txt
 
 #Change the JEC version here!
-for path in Summer16_03Feb2017BCD_V8 Summer16_03Feb2017EF_V8 Summer16_03Feb2017G_V8 Summer16_03Feb2017H_V8 Summer16_03Feb2017BCDEFGHzgjetsL2Res_V8
+for path in Fall17_17Nov2017B_V6 Fall17_17Nov2017C_V6 Fall17_17Nov2017D_V6 Fall17_17Nov2017E_V6 Fall17_17Nov2017F_V6
 do
      for file in Uncertainty_AK4PFchs Uncertainty_AK4PFPuppi Uncertainty_AK4PF Uncertainty_AK8PFchs Uncertainty_AK8PFPuppi Uncertainty_AK8PF 
     do
