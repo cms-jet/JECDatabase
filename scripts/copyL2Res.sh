@@ -10,6 +10,9 @@ TO=$2
 #Name_L2Res="Summer16_03Feb2017BCD_V2_DATA_L2L3Residual_AK4PFchs.txt"
 
 #How it's called in files from L2Res analyser
+#MPF with loglin
+Name_L2Res="Summer16_07Aug2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
+
 #MPF with const and loglin mix
 #Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 #pt-balance with const and loglin mix
@@ -24,7 +27,7 @@ TO=$2
 #Name_L2Res="Summer16_07Aug2017_pT_Hybrid_Barrel_L2Residual_pythia8_AK4PFchs.txt"
 
 #pt-balance with const for preliminary L2Res
-Name_L2Res="Fall17_17Nov2017_pT_FLAT_L2Residual_pythia8_AK4PFchs.txt"
+#Name_L2Res="Fall17_17Nov2017_pT_FLAT_L2Residual_pythia8_AK4PFchs.txt"
 
 #MPF with const for preliminary L2Res
 #Name_L2Res="Fall17_17Nov2017_MPF_FLAT_L2Residual_pythia8_AK4PFchs.txt"
