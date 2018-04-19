@@ -11,7 +11,7 @@ TO=$2
 
 #How it's called in files from L2Res analyser
 #Copy from previous version
-Name_L2Res="Summer16_07Aug2017GH_V6_DATA_L2Residual_AK4PFchs.txt" 
+Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt" 
 
 #MPF from low PU 2015
 #Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
