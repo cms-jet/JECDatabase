@@ -11,13 +11,16 @@ TO=$2
 
 #How it's called in files from L2Res analyser
 #Copy from previous version
-Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt" 
+#Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt" 
 
 #MPF from low PU 2015
 #Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #MPF with loglin
 #Name_L2Res="Fall17_17Nov2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #Name_L2Res="Summer16_07Aug2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
+#pt-balance with loglin
+#Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
+Name_L2Res="Fall17_17Nov2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 
 #MPF with const and loglin mix
 #Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
@@ -37,6 +40,8 @@ Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt"
 
 #MPF with const for preliminary L2Res
 #Name_L2Res="Fall17_17Nov2017_MPF_FLAT_L2Residual_pythia8_AK4PFchs.txt"
+
+
 
 
 L3Res_new=$3" "$4" "$5
