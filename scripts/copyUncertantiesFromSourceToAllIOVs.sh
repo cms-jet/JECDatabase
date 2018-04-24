@@ -11,7 +11,7 @@ source_uncer_source_name=Summer16_03Feb2017_V9_DATA_UncertaintySources_AK4PFchs.
 
 # #Change the JEC version here!
 # #for path in Fall17_17Nov2017B_V6 Fall17_17Nov2017C_V6 Fall17_17Nov2017D_V6 Fall17_17Nov2017E_V6 Fall17_17Nov2017F_V6
-for path in Summer16_07Aug2017BCD_V7 Summer16_07Aug2017EF_V7 Summer16_07Aug2017GH_V7
+for path in Summer16_07Aug2017BCD_V8 Summer16_07Aug2017EF_V8 Summer16_07Aug2017GH_V8
 do
      for file in Uncertainty_AK4PFchs Uncertainty_AK4PFPuppi Uncertainty_AK4PF Uncertainty_AK8PFchs Uncertainty_AK8PFPuppi Uncertainty_AK8PF 
     do
@@ -24,7 +24,7 @@ do
 done
 
 #MC
-for path in Summer16_07Aug2017_V7
+for path in Summer16_07Aug2017_V8
 do
      for file in Uncertainty_AK4PFchs Uncertainty_AK4PFPuppi Uncertainty_AK4PF Uncertainty_AK8PFchs Uncertainty_AK8PFPuppi Uncertainty_AK8PF 
     do
