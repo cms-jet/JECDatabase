@@ -14,7 +14,7 @@ TO=$2
 #Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt" 
 
 #MPF from low PU 2015
-Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
+#Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #MPF with loglin
 #Name_L2Res="Fall17_17Nov2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #Name_L2Res="Summer16_07Aug2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
@@ -36,7 +36,7 @@ Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
 #Name_L2Res="Summer16_07Aug2017_pT_Hybrid_Barrel_L2Residual_pythia8_AK4PFchs.txt"
 
 #pt-balance with const for preliminary L2Res
-#Name_L2Res="Fall17_17Nov2017_pT_FLAT_L2Residual_pythia8_AK4PFchs.txt"
+Name_L2Res="Fall17_17Nov2017_pT_FLAT_L2Residual_pythia8_AK4PFchs.txt"
 
 #MPF with const for preliminary L2Res
 #Name_L2Res="Fall17_17Nov2017_MPF_FLAT_L2Residual_pythia8_AK4PFchs.txt"
