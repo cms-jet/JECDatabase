@@ -4,22 +4,26 @@
 # ./copyL1Res.sh
 
 #DATA
-#path_in=~/JEC_tmp/L1Res/Fall17_17Nov2017_V1/Fall17_17Nov2017_V1/
-path_in=~/JEC_tmp/L1Res/L1Res_2017_V8/newfit_V2_17Nov17_L1FastJetData/
-#path_out=/afs/desy.de/user/k/karavdia/JECDatabase/textFiles/Fall17_17Nov2017
-path_out=/nfs/dust/cms/user/karavdia/JECDatabase/textFiles/Fall17_17Nov2017
-for period in B C D E F
-#for period in B
+path_in=~/JEC_tmp/L1Res/2016/Summer16_07Aug2017_AK8/Summer16_07Aug2017_AK8/
+path_out=/nfs/dust/cms/user/karavdia/JECDatabase/textFiles/Summer16_07Aug2017
+prefix=Summer16_07Aug2017
+version=V9 #destination
+#for period in BCD EF GH
+#for period in BCD EF
+for period in GH
 do
-    for jet in AK4 AK8 
+  #  for jet in AK4 AK8 
+    for jet in AK8 
     do
 #	for corr in L1FastJet_${jet}PFchs L1FastJet_${jet}PF L1RC_${jet}PFchs L1RC_${jet}PF 
 	for corr in L1FastJet_${jet}PFchs L1FastJet_${jet}PF
 	do 
-	    cp ${path_in}/${jet}/Run${period}/Fall17_17Nov2017${period}_V2_Data_${corr}.txt ${path_out}${period}_V8_DATA/Fall17_17Nov2017${period}_V8_DATA_${corr}.txt  
-	    echo ${path_out}${period}_V8_DATA/Fall17_17Nov2017${period}_V8_DATA_${corr}.txt   
+#	    cp ${path_in}/${jet}/Run${period}/${prefix}${period}_Data_${corr}.txt ${path_out}${period}_${version}_DATA/${prefix}${period}_${version}_DATA_${corr}.txt  
+	    cp ${path_in}/${period}/${prefix}${period}_Data_${corr}.txt ${path_out}${period}_${version}_DATA/${prefix}${period}_${version}_DATA_${corr}.txt  
+	    echo ${path_out}${period}_${version}_DATA/${prefix}${period}_${version}_DATA_${corr}.txt   
  
-	    diff ${path_out}${period}_V8_DATA/Fall17_17Nov2017${period}_V8_DATA_${corr}.txt ${path_in}/${jet}/Run${period}/Fall17_17Nov2017${period}_V2_Data_${corr}.txt
+#	    diff ${path_out}${period}_${version}_DATA/${prefix}${period}_${version}_DATA_${corr}.txt ${path_in}/${jet}/Run${period}/${prefix}${period}_Data_${corr}.txt
+	    diff ${path_out}${period}_${version}_DATA/${prefix}${period}_${version}_DATA_${corr}.txt ${path_in}/${period}/${prefix}${period}_Data_${corr}.txt
 	done
     done
 done
