@@ -13,7 +13,8 @@ TO=$2
 for jet_coll in AK4PF AK4PFchs AK4PFPuppi AK8PF AK8PFchs AK8PFPuppi 
 do
 #How it's called in files from MCTruth analyser
-    Name_L1FastJet="Fall17_25nsV1_MC_L1FastJet_"$jet_coll".txt"
+#    Name_L1FastJet="Fall17_25nsV1_MC_L1FastJet_"$jet_coll".txt"
+    Name_L1FastJet="Summer18_25nsV1_MC_L1FastJet_"$jet_coll".txt"
     
 #How it should be called
     Name_L1FastJet_official=${TO}_L1FastJet_$jet_coll".txt"
