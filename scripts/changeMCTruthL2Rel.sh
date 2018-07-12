@@ -14,7 +14,8 @@ for jet_coll in AK4PF AK4PFchs AK4PFPuppi AK8PF AK8PFchs AK8PFPuppi
 do
 #How it's called in files from MCTruth analyser
 #Name_L2Rel="Fall17_25nsV2_MC_L2Relative_"$jet_coll".txt"
-    Name_L2Rel="Fall17_25nsV1_MC_L2Relative_"$jet_coll".txt"
+#    Name_L2Rel="Fall17_25nsV1_MC_L2Relative_"$jet_coll".txt"
+    Name_L2Rel="Summer18_25nsV1_MC_L2Relative_"$jet_coll".txt"
     
 #How it should be called
     Name_L2Rel_official=${TO}_L2Relative_$jet_coll".txt"
