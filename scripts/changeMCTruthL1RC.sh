@@ -11,12 +11,12 @@ TO=$2
 
 
 #for jet_coll in AK4PF AK4PFchs AK4PFPuppi AK8PF AK8PFchs AK8PFPuppi 
-#for jet_coll in AK4PF AK4PFchs AK8PF AK8PFchs 
-for jet_coll in AK4PF AK4PFchs
+for jet_coll in AK4PF AK4PFchs AK8PF AK8PFchs 
+#for jet_coll in AK4PF AK4PFchs
 do
 #How it's called in files from MCTruth analyser
  #     Name_L1FastJet="Fall17_25nsV1_MC_L1RC_"$jet_coll".txt"
-    Name_L1FastJet="Fall17_17Nov2017B_V22_MC_L1RC_"$jet_coll".txt"
+    Name_L1FastJet="Summer16_07Aug2017GH_V13_DATA_L1RC_"$jet_coll".txt"
 #     Name_L1FastJet="Fall17_17Nov2017F_V22_DATA_L1RC_"$jet_coll".txt"
 
     
