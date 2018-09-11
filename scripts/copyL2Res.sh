@@ -22,9 +22,10 @@ TO=$2
 #pt-balance with loglin
 #Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #Name_L2Res="Fall17_17Nov2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-Name_L2Res="Fall17_17Nov2017_pT_LOGLIN2_L2Residual_pythia8_AK4PFchs.txt" 
+#Name_L2Res="Fall17_17Nov2017_pT_LOGLIN2_L2Residual_pythia8_AK4PFchs.txt" 
 
 #MPF with const and loglin mix
+Name_L2Res="Summer16_07Aug2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 #Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 #pt-balance with const and loglin mix
 #Name_L2Res="Summer16_03Feb2017_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
