@@ -26,7 +26,8 @@ TO=$2
 
 #MPF with const and loglin mix
 #Name_L2Res="Summer16_07Aug2017GH_V16_DATA_L2Residual_AK4PFchs.txt" 
-Name_L2Res="Fall17_17Nov2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
+#Name_L2Res="Fall17_17Nov2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
+Name_L2Res="Fall17_17Nov2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 
 #Name_L2Res="Summer16_07Aug2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 #Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
