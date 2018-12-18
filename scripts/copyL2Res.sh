@@ -2,75 +2,28 @@
 # Script to copy L2Residuals files and add L3Residuals part
 # usage
 # ./copyL2Res.sh L2Res_SOURCE L2Res_DESTINATION L3Res_par0 L3Res_par1 L3Res_par2
+# created by A.Karavdina
 FROM=$1
 TO=$2
-#Name_L2Res="Spring16_25ns_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
-#Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
-#Name_L2Res="Summer16_23Sep2016_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
-#Name_L2Res="Summer16_03Feb2017BCD_V2_DATA_L2L3Residual_AK4PFchs.txt"
 
 #How it's called in files from L2Res analyser
-#Copy from previous version
-#Name_L2Res="Summer16_07Aug2017GH_V7_DATA_L2Residual_AK4PFchs.txt" 
 
-#MPF from low PU 2015
-#Name_L2Res="Run2015D_LowPU_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
 #MPF with loglin
-#Name_L2Res="Fall17_17Nov2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-#Name_L2Res="Fall17_17Nov2017F_V12_DATA_L2Residual_AK4PFchs.txt" 
-#Name_L2Res="Summer16_07Aug2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-#pt-balance with loglin
-#Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-#Name_L2Res="Fall17_17Nov2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-#Name_L2Res="Fall17_17Nov2017_pT_LOGLIN2_L2Residual_pythia8_AK4PFchs.txt" 
-
-#MPF with const and loglin mix
-#Name_L2Res="Summer16_07Aug2017GH_V16_DATA_L2Residual_AK4PFchs.txt" 
-#Name_L2Res="Fall17_17Nov2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
 Name_L2Res="Fall17_17Nov2017_MPF_LOGLIN_L2Residual_pythia8_AK4PFchs.txt" 
-
-#Name_L2Res="Summer16_07Aug2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
-#Name_L2Res="Summer16_03Feb2017_MPF_Hybrid_L2Residual_pythia8_AK4PFchs.txt" 
-#pt-balance with const and loglin mix
-#Name_L2Res="Summer16_03Feb2017_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
-#mix of pt-balance and MPF
-#Name_L2Res="Summer16_03Feb2017_MPF_pT_Hybrid_L2Residual_pythia8_AK4PFchs.txt"
-
-#pt-balance with loglin 
-#Name_L2Res="Summer16_07Aug2017_pT_LOGLIN_L2Residual_pythia8_AK4PFchs.txt"
-
-#pt-balance with loglin for |eta|>1.3 and const for |eta|<1.3
-#Name_L2Res="Summer16_07Aug2017_pT_Hybrid_Barrel_L2Residual_pythia8_AK4PFchs.txt"
-
-#pt-balance with const for preliminary L2Res
-#Name_L2Res="Fall17_17Nov2017_pT_FLAT_L2Residual_pythia8_AK4PFchs.txt"
-
-#MPF with const for preliminary L2Res
-#Name_L2Res="Fall17_17Nov2017_MPF_FLAT_L2Residual_pythia8_AK4PFchs.txt"
-
-
-
 
 L3Res_new=$3" "$4" "$5
 echo "Following L3Residuals are going to be used: $L3Res_new"
 echo "$Name_L2Res"
+
 #How it should be called
 Name_L2Res_official=${TO}_L2Residual
 Name_L2L3Res_official=${TO}_L2L3Residual
 
-#tar -zxvf ${FROM}.tar.gz
+
 f=${FROM}
 t=${TO}
 
-# if [ ! -d "$f" ]; then
-#     echo "Error: $f does not exist"
-#     continue
-# fi
 
-# if [ -d "$t" ]; then
-#     echo "Error: $t already exist"
-#     continue
-# fi
 
 echo "Cloning $f to $t"
 echo "File name $f/$Name_L2Res"
@@ -104,20 +57,4 @@ cp  $t/${Name_L2Res_official}_AK4PFchs.txt $t/${Name_L2L3Res_official}_AK8PF.txt
 sed -i "s/${L3Res_default}/${L3Res_new}/g" $t/${Name_L2L3Res_official}_AK8PF.txt
 
 echo "Check the file: "$t/${Name_L2L3Res_official}_AK4PFchs.txt
-
-# pushd $t &> /dev/null
-
-# echo "Substituing $FROM to $TO in all files..."
-# find . \( -type l -o -type f \) |
-#     while read filename
-#     do
-#         if [ -L $filename ]; then
-#             target=`readlink $filename`
-#             ln -sf ${target//$FROM/$TO} $filename
-#         fi
-	
-#         mv $filename ${filename//$FROM/$TO}
-#     done
-    
-#     popd &> /dev/null
 echo "Done"
