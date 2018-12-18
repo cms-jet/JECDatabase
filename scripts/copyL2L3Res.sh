@@ -1,15 +1,12 @@
 #! /bin/bash
-# Script to copy L2L3Residuals files after the global fit to the JEC version
+# [tmp] Script to copy L2L3Residuals files after the global fit to the JEC version
 # usage
-# ./copyL2L3Res.sh L2L3Res_SOURCE L2L3Res_DESTINATION 
+# ./copyL2L3Res.sh L2L3Res_SOURCE_DIR L2L3Res_DESTINATION_DIR 
+# created by A.Karavdina
 FROM=$1
 TO=$2
 
 Name_L2L3Res="GlobalFitOutput_L2L3Residuals_B.txt"
-#Name_L2L3Res="GlobalFitOutput_L2L3Residuals_C.txt"
-#Name_L2L3Res="GlobalFitOutput_L2L3Residuals_D.txt"
-#Name_L2L3Res="GlobalFitOutput_L2L3Residuals_E.txt"
-#Name_L2L3Res="GlobalFitOutput_L2L3Residuals_F.txt"
 
 Name_L2Res_official=${TO}_L2Residual
 Name_L2L3Res_official=${TO}_L2L3Residual
@@ -41,19 +38,4 @@ cp  $t/${Name_L2Res_official}_AK4PFchs.txt $t/${Name_L2L3Res_official}_AK8PF.txt
 
 echo "Check the file: "$t/${Name_L2L3Res_official}_AK4PFchs.txt
 
-# pushd $t &> /dev/null
-
-# echo "Substituing $FROM to $TO in all files..."
-# find . \( -type l -o -type f \) |
-#     while read filename
-#     do
-#         if [ -L $filename ]; then
-#             target=`readlink $filename`
-#             ln -sf ${target//$FROM/$TO} $filename
-#         fi
-	
-#         mv $filename ${filename//$FROM/$TO}
-#     done
-    
-#     popd &> /dev/null
 echo "Done"

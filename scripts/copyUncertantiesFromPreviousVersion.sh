@@ -1,7 +1,6 @@
 #! /bin/bash
-# [temporary] scrip to copy unchanges L1Res and JPT files
-# usage
-# ./copyL1Res_JPT.sh
+# [temporary] scrip to copy uncertainties
+# created by A.Karavdina
 #DATA
 for path in Summer16_23Sep2016BCD Summer16_23Sep2016EF Summer16_23Sep2016G Summer16_23Sep2016H
 do

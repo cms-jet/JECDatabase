@@ -2,6 +2,7 @@
 # [temporary] scrip to copy unchanges L1Res and JPT files
 # usage
 # ./copyL1Res_JPT.sh
+# created by A.Karavdina
 #DATA
 path_src=/afs/desy.de/user/k/karavdia/Downloads/L1L2L3_JPT_Calo_14June2017/
 name_src=Summer16_03Feb2017_V1_MC

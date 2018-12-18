@@ -1,7 +1,8 @@
 #! /bin/bash
-# Script to copy L2Residuals and L2L3Residuals files from AK4CHS to the rest
+# [tmp] Script to copy L2Residuals and L2L3Residuals files from AK4CHS to the rest
 # usage
 # ./copyL2Res_AK4CHS_to_All.sh JEC_Folder 
+# created by A.Karavdina
 FROM=$1
 #TO=$2
 #How it should be called
