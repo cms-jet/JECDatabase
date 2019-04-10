@@ -1,1 +1,2 @@
-../Autumn18_V9_MC/Autumn18_V9_MC_L2Residual_AK4PFPuppi.txt
+{1         JetEta              1          JetPt               1     Correction     L2Relative}
+-5.191          5.191              2              4           5000              

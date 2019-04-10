@@ -1,1 +1,2 @@
-../Autumn18_V8_MC/Autumn18_V8_MC_L2Relative_AK4JPT.txt
+{2 JetEta JetPt 1 JetPt 1 Correction L2Relative}
+  -5.2 5.2 0 6000 2 0 6000

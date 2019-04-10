@@ -1,1 +1,2 @@
-../Autumn18_RunC_V8_DATA/Autumn18_RunC_V8_DATA_L2Relative_AK8PF.txt
+{2 JetEta JetPt 1 JetPt 1 Correction L2Relative}
+  -5.2 5.2 0 6000 2 0 6000
