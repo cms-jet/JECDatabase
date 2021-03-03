@@ -12,10 +12,15 @@ cmsrel CMSSW_11_2_0_pre10
 cd CMSSW_11_2_0_pre10/src
 cmsenv
 git clone --recursive git@github.com:nsmith-/correctionlib.git
+#in case you haven't set up your github you may fall back to
+#git clone --recursive https://github.com/nsmith-/correctionlib.git
 cd correctionlib
 make PYTHON=python3
 cd $CMSSW_BASE/src
 scram b
+#to get a snapshot of the current version of the scripts without checking out the [HUGE] JECDatabase
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JEC2JSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/testJECJSON.py
 ```
 
 ## Usage
