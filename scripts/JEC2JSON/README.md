@@ -16,7 +16,7 @@ git clone --recursive git@github.com:nsmith-/correctionlib.git
 #git clone --recursive https://github.com/nsmith-/correctionlib.git
 cd correctionlib
 #dirty local installation of the latest version (better to use a plain "python3 -m pip install correctionlib --user" once schemav2 is available there)
-echo "version = '0.0.0'" > correctionlib/src/correctionlib/version.py
+echo "version = '0.0.0'" > src/correctionlib/version.py
 python3 -m pip install . --user
 cd $CMSSW_BASE/src
 scram b
