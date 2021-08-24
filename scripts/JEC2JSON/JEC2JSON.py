@@ -8,28 +8,33 @@ import os
 parser = argparse.ArgumentParser()
  
 # Adding optional argument
-parser.add_argument("inputTXT", help = "path to input JEC txt-file")
+parser.add_argument("inputTXT", help = "base name of JEC txt-files (e.g. Summer19UL16APV_V2_MC); L1/L2/L3/L2L3Residual PFCHS corrections will be merged into a single JSON")
 parser.add_argument("-o", "--Output", help = "define path for output JSON (default: input path + \".json\")")
+parser.add_argument("-a", "--AlgoType", default="AK4PFchs", help = "define jet type for which JSON is created")
 args = parser.parse_args()
 baseInputName = os.path.basename(args.inputTXT)
 
 
 output=args.inputTXT+".json"
 if args.Output!=None: output= args.output
-print("Will convert {} to \n {}".format(args.inputTXT, output))
+print("Will convert {} JEC files to \n {} \n L1/L2/L3/L2L3Residual corrections for {} jets  will be merged into a single JSON".format(args.inputTXT, output, args.AlgoType))
 
-JECParams =  ROOT.JetCorrectorParameters(args.inputTXT,"")
-JECParams.printScreen()
+correctionLevels = ["L1FastJet",
+                    "L2Relative",
+                    "L3Absolute",
+                    "L2L3Residual",
+                ]
+correctionLevels = ["{}_{}".format(corr,args.AlgoType) for corr in correctionLevels]
 
-inputsneeded = set() #we only need the input variables set once, even if used multiple times, so filter out overlap 
-for i in range(0,JECParams.definitions().nParVar()): inputsneeded.add(JECParams.definitions().parVar(i)) 
-for i in range(0,JECParams.definitions().nBinVar()): inputsneeded.add(JECParams.definitions().binVar(i)) 
-inputsneeded = list(sorted(inputsneeded))
+for lvl in correctionLevels:
+    print("{}_{}.txt".format(args.inputTXT,lvl))
+#exit(0)
+JECParamsIndiv = [ROOT.JetCorrectorParameters("{}_{}.txt".format(args.inputTXT,lvl),"")  for lvl in correctionLevels]
 
-logging.info("Inputs needed for binning and formula evaluation: ", inputsneeded)
 
 def build_formula(jcparams,recordi):
     formula = jcparams.definitions().formula()
+    formula = formula.replace("TMath::Log","log")
     parameters = [float(str(np.single(p))) for p in jcparams.record(recordi).parameters()]
     #parameters = [p for p in jcparams.record(recordi).parameters()]
     parametersForm = parameters[2*jcparams.definitions().nParVar():]
@@ -85,20 +90,58 @@ def recurseThroughBinningToFormula(jcparams, binvari, recordi):
 
 
 
-from correctionlib.schemav2 import Correction, Binning, Category, Formula
-corrJEC = Correction.parse_obj(
-    {
-        "version": 1,
-        "name": "JEC",
-        "description": "JSON file created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JEC2JSON.py".format(baseInputName),
-        "inputs": [
-            {"name": item, "type": "real"} for item in inputsneeded
-        ],
-        "output": {"name": "correction", "type": "real"},
-        "data": recurseThroughBinningToFormula(JECParams,0,0),
-    }
-)
-logging.debug(corrJEC)
+from correctionlib.schemav2 import Correction, Binning, Category, Formula, CompoundCorrection
+
+def getCompoundJEC(allInputs, corrLevels):
+    compJEC = CompoundCorrection.parse_obj(
+        {
+            "name": "{}_{}_L1L2L3Res".format(baseInputName,args.AlgoType),
+            "description": "compound correction created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JEC2JSON.py".format(baseInputName),
+            "inputs": [
+                {"name": item, "type": "real"} for item in allInputs
+            ],
+            "inputs_update": ["JetPt"],
+            "input_op": "*",
+            "output_op": "*",
+            "output": {"name": "correction", "type": "real"},
+            "stack": ["{}_{}".format(baseInputName, level) for level in corrLevels],
+        }
+    )
+    logging.debug(compJEC)
+    return compJEC
+
+def getIndivCorrectionLevel(jcparams,inputs, corrLevel):
+    corrJEC = Correction.parse_obj(
+        {
+            "version": 1,
+            "name": "{}_{}".format(baseInputName, corrLevel),
+            "description": "{} created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JEC2JSON.py".format(corrLevel, baseInputName),
+            "inputs": [
+                {"name": item, "type": "real"} for item in inputs
+            ],
+            "output": {"name": "correction", "type": "real"},
+            "data": recurseThroughBinningToFormula(jcparams,0,0),
+        }
+    )
+    logging.debug(corrJEC)
+    return corrJEC
+
+
+parsedCorrections = []
+inputsAllLevels = set()
+for idx,JECParams in enumerate(JECParamsIndiv):
+     JECParams.printScreen()
+     
+     inputsneeded = set() #we only need the input variables set once, even if used multiple times, so filter out overlap 
+     for i in range(0,JECParams.definitions().nParVar()): inputsneeded.add(JECParams.definitions().parVar(i)) 
+     for i in range(0,JECParams.definitions().nBinVar()): inputsneeded.add(JECParams.definitions().binVar(i)) 
+     inputsneeded = list(sorted(inputsneeded))
+     inputsAllLevels.update(inputsneeded)
+     logging.info("Inputs needed for binning and formula evaluation: ", inputsneeded)
+     parsedCorrections.append(getIndivCorrectionLevel(JECParams,inputsneeded,correctionLevels[idx]))
+
+inputsAllLevels = list(sorted(inputsAllLevels))
+
 
 
 from correctionlib.schemav2 import CorrectionSet
@@ -106,9 +149,8 @@ import gzip
 
 cset = CorrectionSet.parse_obj({
     "schema_version": 2,
-    "corrections": [
-        corrJEC,
-    ]
+    "corrections": [corr for corr in parsedCorrections],
+    "compound_corrections": [getCompoundJEC(inputsAllLevels,correctionLevels)]
 })
 
 with open(output, "w") as fout:
