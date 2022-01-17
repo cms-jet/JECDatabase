@@ -8,46 +8,53 @@ We need a recent CMSSW (>=11_2) for Python3-support in the associated ROOT and [
 
 At the time of writing this recipe works fine:
 ```bash
-cmsrel CMSSW_12_1_0_pre1
-cd CMSSW_12_1_0_pre1/src
+cmsrel CMSSW_12_1_1
+cd CMSSW_12_1_1/src
 cmsenv
-python3 -m pip install --user git+https://github.com/cms-nanoAOD/correctionlib.git
+git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools # for tests
+python3 -m pip install --user git+https://github.com/cms-nanoAOD/correctionlib.git #latest version from master
 cd $CMSSW_BASE/src
 scram b
 #to get a snapshot of the current version of the scripts without checking out the [HUGE] JECDatabase
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JER2JSON.py
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JEC2JSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/testJECJSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JERCHelpers.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/createJSONs.py
 ```
 
 ## Usage
 
-For a given collection of JEC-txt files with the base name `JECDummy`, the algorithm type "AK4PFchs", and the correction levels ["L1FastJet", "L2Relative", "L3Absolute", "L2L3Residual"], the conversion works as follows:
-```bash
-python3 JEC2JSON.py JECDummy
-python3 testJECJSON.py JECDummy
+The tool selection expects the JER/JEC files to be available as tarballs from the JEC/JR-databases on github. You can modify the behavior by editing createJSONs.py, giving the list of parameters to be merged into subcategory, and then "per-year" files. An example to create the 2018_JERC_JSON file is given below. Uncertainty sources are only saved for the MC-tag.
 ```
-JEC2JSON.py will by default output a JECDummy.json file.
-testJECJSON.py will by default read in JECDummy_[all correctionlevels]_[jet type=AK4PFchs].txt and JECDummy.json
+JEC2018=[
+"Summer19UL18_V5_MC",
+"Summer19UL18_RunA_V5_DATA",
+"Summer19UL18_RunB_V5_DATA",
+"Summer19UL18_RunC_V5_DATA",
+"Summer19UL18_RunD_V5_DATA",
+]
 
-Example (assuming that JECDatabase is not checked out...):
-```bash
-cd $CMSSW_BASE/src
-wget https://github.com/cms-jet/JECDatabase/raw/master/textFiles/Summer19UL16APV_RunBCD_V7_DATA/Summer19UL16APV_RunBCD_V7_DATA_L1FastJet_AK4PFchs.txt
-wget https://github.com/cms-jet/JECDatabase/raw/master/textFiles/Summer19UL16APV_RunBCD_V7_DATA/Summer19UL16APV_RunBCD_V7_DATA_L2Relative_AK4PFchs.txt
-wget https://github.com/cms-jet/JECDatabase/raw/master/textFiles/Summer19UL16APV_RunBCD_V7_DATA/Summer19UL16APV_RunBCD_V7_DATA_L3Absolute_AK4PFchs.txt
-wget https://github.com/cms-jet/JECDatabase/raw/master/textFiles/Summer19UL16APV_RunBCD_V7_DATA/Summer19UL16APV_RunBCD_V7_DATA_L2L3Residual_AK4PFchs.txt
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JEC2JSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/testJECJSON.py
-python3 JEC2JSON.py Summer19UL16APV_RunBCD_V7_DATA
-python3 testJECJSON.py Summer19UL16APV_RunBCD_V7_DATA
-#Expected output: Three differences on level of 10e-4 % level in L1FastJet and compound correction
-#For pre-July2021 pre-12X releases many differences, but only for eta=5.191 bin edge, cf. https://github.com/cms-sw/cmssw/issues/34381
+JER2018=[
+"Summer19UL18_JRV2_MC",
+]
+
+algosToConsider=[
+"AK4PFchs",
+"AK8PFPuppi"
+]
+
+createSingleYearJSON(JER2018,JEC2018,algosToConsider,"2018_JERC_All")
 ```
 
-## Known issues/caveats
-- ~~No "factorized jet corrector" functionality, only individual correction levels so far~~ - working with correctionlibv2 and extended JEC2JSON
-- ~~Stub usage of "name" and "description" functionality (only dumping input JEC-txt-file)~~ - name built by combining base names and correction levels (+"_L1L2L3Res") such that one could merge multiple JSONS
-- ~~Different behavior at least at the upper end of the last bin (JSON-evaluator: out of range; CMSSW: evaluated at last bin), e.g. eta=+5.191 for many JEC txt-files, cf. https://github.com/cms-sw/cmssw/issues/34381~~ - resolved in post July 2021 12X-releases by PR linked in issue
+To create the JSON-files and summary html files for all three years for AK4PFchs and AK8PFPuppi you may simply run
+```bash
+python3 createJSONs.py
+```
+
+## Known issues/caveats remaining after arrival of schema v2
+- Small inconsistency for JR-factors at (eta) bin edges due to inconistent handling (JEC and JSON uniform vs. JR code including lower and upper edge of bins). To be addressed in a PR
+- Uncertainty sources takes up a lot of space. Needs formularef to emulate uncertainty-code interpolation for each pt/eta-bin + many sources. Close to 50MB for all sources when JSON not compressed
+- Todo: Use formularef also for regular JEC, if applicable
 - Single vs. double floating point precision related differences in JEC-calculation (CMSSW JetCorrectorParameters uses C-floats) - differences generally very small
 - correctionlib doesn't support TMath::XXX namespace. Currently only implemented replacement for "TMath::Log"-->"log", but there are other occurences of TMath in [very] old JEC txt-files. More replacements can be added as the conversion happens and TMath::XXX shouldgenerally be avoided in new JEC txt files.
 
