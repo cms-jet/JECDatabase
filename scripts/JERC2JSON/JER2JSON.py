@@ -22,19 +22,14 @@ output="{}_{}.json".format(args.inputTXT,args.AlgoType)
 if args.Output!=None: output= args.output
 print("Will convert {} JER files to \n {} \n Pt/Eta/Phi resolution and SFs for {} jets  will be merged into a single JSON".format(args.inputTXT, output, args.AlgoType))
 
-correctionLevels = ["PtResolution",
-                    #"EtaResolution", #missing in Summer19UL17_JRV3?
-                    "PhiResolution",
-                    "ScaleFactor"
-                ]
-correctionLevelsWithAlgo = ["{}_{}".format(corr,args.AlgoType) for corr in correctionLevels]
+#resolutionLevelsWithAlgo = ["{}_{}".format(corr,args.AlgoType) for corr in resolutionLevels]
 
-for lvl in correctionLevels:
+for lvl in resolutionLevels:
     print("{}_{}_{}.txt".format(args.inputTXT,lvl,args.AlgoType))
 #exit(0)
 
 
-for lvl in correctionLevels:
+for lvl in resolutionLevels:
     with open("{}/{}_{}_{}.txt".format(args.inputTXT,args.inputTXT,"SF" if lvl=="ScaleFactor" else lvl,args.AlgoType)) as f:
         lines = f.readlines()
     if "Resolution" in lvl:
@@ -45,8 +40,8 @@ for lvl in correctionLevels:
     with open("{}_{}_{}.JSONtmptxt".format(args.inputTXT,lvl,args.AlgoType), "w") as f:
         f.writelines(lines)
 
-JECParamsIndiv = [ROOT.JetCorrectorParameters("{}_{}_{}.JSONtmptxt".format(args.inputTXT,lvl,args.AlgoType),"")  for lvl in correctionLevels]
-for lvl in correctionLevels:
+JECParamsIndiv = [ROOT.JetCorrectorParameters("{}_{}_{}.JSONtmptxt".format(args.inputTXT,lvl,args.AlgoType),"")  for lvl in resolutionLevels]
+for lvl in resolutionLevels:
     os.remove("{}_{}_{}.JSONtmptxt".format(args.inputTXT,lvl,args.AlgoType))
 
 parsedCorrections = []
@@ -60,7 +55,7 @@ for idx,JECParams in enumerate(JECParamsIndiv):
      inputsAllLevels.update(inputsneeded)
      #if 
      logging.info("Inputs needed for binning and formula evaluation: ", inputsneeded)
-     parsedCorrections.append(getIndivCorrectionLevel(JECParams,inputsneeded,correctionLevels[idx],baseInputName, args.AlgoType))
+     parsedCorrections.append(getIndivCorrectionLevel(JECParams,inputsneeded,resolutionLevels[idx],baseInputName, args.AlgoType))
 
 inputsAllLevels = list(sorted(inputsAllLevels))
 
