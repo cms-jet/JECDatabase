@@ -16,12 +16,12 @@ python3 -m pip install --user git+https://github.com/cms-nanoAOD/correctionlib.g
 cd $CMSSW_BASE/src
 scram b
 #to get a snapshot of the current version of the scripts without checking out the [HUGE] JECDatabase
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JER2JSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JEC2JSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JERCHelpers.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/createJSONs.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/testJERCJSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/miniDemo.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/JER2JSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/JEC2JSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/JERCHelpers.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/createJSONs.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/testJERCJSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/miniDemo.py
 ```
 
 ## Usage
