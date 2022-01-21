@@ -21,11 +21,6 @@ output="{}_{}.json".format(args.inputTXT,args.AlgoType)
 if args.Output!=None: output= args.output
 print("Will convert {} JEC files to \n {} \n L1/L2/L3/L2L3Residual corrections for {} jets  will be merged into a single JSON".format(args.inputTXT, output, args.AlgoType))
 
-correctionLevels = ["L1FastJet",
-                    "L2Relative",
-                    "L3Absolute",
-                    "L2L3Residual",
-                ]
 correctionLevelsWithAlgo = ["{}_{}".format(corr,args.AlgoType) for corr in correctionLevels]
 
 JECParamsIndiv = []

@@ -1,0 +1,76 @@
+import ROOT
+import correctionlib._core as core
+jec,algo,lvl,unc=("Summer19UL16_V7_MC","AK4PFchs","L2Relative","Total")
+pt,eta=(100.,0.)
+print("\JEC Parameters: ", jec, algo, lvl, unc,  pt, eta)
+
+print("\n\nSingle JEC level:\n===================")
+#CMSSW (JEC)
+print("Opening {}/{}_{}_{}.txt".format(jec,jec,lvl,algo))
+vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
+vPar.push_back(ROOT.JetCorrectorParameters("{}/{}_{}_{}.txt".format(jec,jec,lvl,algo),""))
+JetCorrector = ROOT.FactorizedJetCorrector(vPar)
+JetCorrector.setJetEta(eta)
+JetCorrector.setJetPt(pt)
+print("CMSSW result: {}".format(JetCorrector.getCorrection()))
+
+#JSON (JEC)
+cset = core.CorrectionSet.from_file("2016_JERC_All.json.gz")
+print("JSON access to: {}_{}_{}".format(jec, lvl, algo))
+sf=cset["{}_{}_{}".format(jec, lvl, algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+
+print("\n\n JECSource:\n===========")
+#CMSSW (JECSource)
+TotalUncertainty=ROOT.JetCorrectionUncertainty(ROOT.JetCorrectorParameters("{}/{}_UncertaintySources_{}.txt".format(jec,jec,algo),unc))
+TotalUncertainty.setJetEta(eta)
+TotalUncertainty.setJetPt(pt)
+print("CMSSW result: {}".format(TotalUncertainty.getUncertainty(True)))
+
+#JSON (JECSource)
+sf=cset["{}_{}_{}".format(jec, unc, algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+
+
+jer,algo,syst=("Summer20UL16_JRV3_MC","AK4PFchs","nom")
+pt,eta,rho=(100.,0.,15.)
+print("\n\n JER parameters: ", jer, algo, lvl, syst,  pt, eta)
+
+print("\n\n JER SF:\n=========")
+#CMSSW (JER scale factor)
+jerSF_and_Uncertainty = ROOT.PyJetResolutionScaleFactorWrapper("{}/{}_SF_{}.txt".format(jer,jer,algo))
+params_sf_and_uncertainty = ROOT.PyJetParametersWrapper()
+params_sf_and_uncertainty.setJetEta(eta)
+params_sf_and_uncertainty.setJetPt(pt)
+idx=0
+if syst=="up": idx=2
+elif syst=="down": idx=1
+elif syst=="nom": idx=0
+else: raise RuntimeError('systematic variation not supported')
+print("CMSSW result: {}".format(jerSF_and_Uncertainty.getScaleFactor(params_sf_and_uncertainty,idx)))
+
+#JSON (JER scale factor)
+sf=cset["{}_ScaleFactor_{}".format(jer, algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[eta,syst])))
+
+
+print("\n\n PtResolution:\n==============")
+ResolutionChoice="PtResolution"
+#CMSSW (JER Resolution)
+jerobj = ROOT.PyJetResolutionWrapper("{}/{}_{}_{}.txt".format(jer,jer,ResolutionChoice,algo))
+params_resolution = ROOT.PyJetParametersWrapper()
+params_resolution.setJetEta(eta)
+params_resolution.setJetPt(pt)
+params_resolution.setRho(rho)
+print("CMSSW result: {}".format(jerobj.getResolution(params_resolution)))
+
+
+#JSON (JER scale factor)
+sf=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[eta,pt,rho])))
+
+

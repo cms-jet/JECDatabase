@@ -4,6 +4,62 @@ import argparse
 import logging
 import re
 import os
+from statistics import mean, median, stdev
+
+JEC2016=[
+"Summer19UL16APV_RunBCD_V7_DATA",
+"Summer19UL16APV_RunEF_V7_DATA",
+"Summer19UL16APV_V7_MC",
+"Summer19UL16_RunFGH_V7_DATA",
+"Summer19UL16_V7_MC",
+]
+
+JER2016=[
+"Summer20UL16APV_JRV3_MC",
+"Summer20UL16_JRV3_MC"
+]
+
+JEC2017=[
+"Summer19UL17_V5_MC",
+"Summer19UL17_RunB_V5_DATA",
+"Summer19UL17_RunC_V5_DATA",
+"Summer19UL17_RunD_V5_DATA",
+"Summer19UL17_RunE_V5_DATA",
+"Summer19UL17_RunF_V5_DATA",
+]
+
+JER2017=[
+"Summer19UL17_JRV3_MC",
+]
+
+JEC2018=[
+"Summer19UL18_V5_MC",
+"Summer19UL18_RunA_V5_DATA",
+"Summer19UL18_RunB_V5_DATA",
+"Summer19UL18_RunC_V5_DATA",
+"Summer19UL18_RunD_V5_DATA",
+]
+
+JER2018=[
+"Summer19UL18_JRV2_MC",
+]
+
+algosToConsider=[
+"AK4PFchs",
+"AK8PFPuppi"
+]
+
+resolutionLevels = ["PtResolution",
+                    "EtaResolution", 
+                    "PhiResolution",
+                    "ScaleFactor"
+                ]
+
+correctionLevels = ["L1FastJet",
+                    "L2Relative",
+                    "L3Absolute",
+                    "L2L3Residual",
+                ]
 
 
 inputDescriptionMap={
@@ -41,7 +97,7 @@ def doSpecialCases(jcparams,recordi): #uncertainties and JER Scale Factors
                 "parameters": [(upvar[idx+1]-upvar[idx])/(edges[idx+1]-edges[idx]), (upvar[idx]*edges[idx+1]-upvar[idx+1]*edges[idx])/(edges[idx+1]-edges[idx]),edges[0],edges[-1]], # linear interpolation
             }) for idx in range(len(edges)-1)
             ],
-            "flow": "clamp", 
+            "flow": "clamp",
         })
     if CorrectionLevel=="ScaleFactor": #only for binned SFs for now (no parametrization, just nom/up/down)
         assert(len(parameters)==3)
@@ -63,6 +119,8 @@ def build_formula(jcparams,recordi):
     if formula=='""' or formula=="None":
         return doSpecialCases(jcparams,recordi)
     formula = formula.replace("TMath::Log","log")
+    formula = formula.replace("TMath::Max","max")
+    formula = formula.replace("TMath::Power","pow")
     parameters = [float(str(np.single(p))) for p in jcparams.record(recordi).parameters()]
     #parameters = [p for p in jcparams.record(recordi).parameters()]
     parametersForm = parameters[2*jcparams.definitions().nParVar():]
@@ -113,7 +171,7 @@ def recurseThroughBinningToFormula(jcparams, binvari, recordi):
         ],
         #        "flow": "clamp", #JEC need a different kind of clamp (in formula)
 #        "flow": "error", 
-        "flow": 1.0, 
+        "flow": 1.0 if jcparams.definitions().level()!="JECSource" else -999., 
     })
 
 
@@ -124,7 +182,7 @@ from correctionlib import schemav2 as schema
 def getCompoundJEC(allInputs, corrLevels, baseInputName, AlgoType):
     compJEC = CompoundCorrection.parse_obj(
         {
-            "name": "{}_{}_L1L2L3Res".format(baseInputName,AlgoType),
+            "name": "{}_L1L2L3Res_{}".format(baseInputName,AlgoType),
             "description": "compound correction created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JEC2JSON.py".format(baseInputName),
             "inputs": [
                 {"name": item, "type": inputTypeMap[item], "description" : inputDescriptionMap[item]} for item in allInputs
@@ -165,5 +223,93 @@ def getIndivCorrectionLevel(jcparams,inputs, corrLevel, baseInputName, AlgoType)
     )
     logging.debug(corrJEC)
     return corrJEC
+
+
+def getCorrection(pt,eta,rho,area,corrector=None):
+    if corrector == None: raise RuntimeError('Configuration not supported')
+    corrector.setJetEta(eta)
+    corrector.setJetPt(pt)
+    corrector.setJetA(area)
+    corrector.setRho(rho)
+    corr = corrector.getCorrection()
+    return corr
+
+def getResolution(pt,eta,rho,corrector=None):
+    if corrector == None: raise RuntimeError('Configuration not supported')
+    params_resolution = ROOT.PyJetParametersWrapper()
+    params_resolution.setJetEta(eta)
+    params_resolution.setJetPt(pt)
+    params_resolution.setRho(rho)
+    corr = corrector.getResolution(params_resolution)
+    return corr
+
+def getScaleFactor(pt,eta,syst,corrector=None):
+    if corrector == None: raise RuntimeError('Configuration not supported')
+    params_sf_and_uncertainty = ROOT.PyJetParametersWrapper()
+    params_sf_and_uncertainty.setJetEta(eta)
+    params_sf_and_uncertainty.setJetPt(pt)
+    idx=0
+    if syst=="up": idx=2
+    elif syst=="down": idx=1
+    elif syst=="nom": idx=0
+    else: raise RuntimeError('systematic variation not supported')
+    corr = corrector.getScaleFactor(params_sf_and_uncertainty,idx)
+    return corr
+
+def getUncertainty(pt,eta,corrector=None):
+    if corrector == None: raise RuntimeError('Configuration not supported')
+    corrector.setJetEta(eta)
+    corrector.setJetPt(pt)
+    corr = corrector.getUncertainty(True)
+    return corr
+
+def testCMSSWVsCorrectionlib(correctionInputs,CMSSWcorrector,libcorrector,testVariant="Correction"):
+    reldifferences = []
+    inputsneeded = [ bla.name for bla in libcorrector.inputs]
+    deviationsFound = False
+    logpath="logs/{}.txt".format(libcorrector.name)
+    if os.path.isfile(logpath):
+        os.remove(logpath) #clear log-file for testing.
+    for test in correctionInputs:
+        CMSSWresult = -1
+        if testVariant=="Uncertainty":
+            CMSSWresult = getUncertainty(test["JetPt"],
+                                        test["JetEta"],
+                                        CMSSWcorrector)
+        elif testVariant=="Correction":
+            CMSSWresult = getCorrection(test["JetPt"],
+                                        test["JetEta"],
+                                        test["Rho"],
+                                        test["JetA"],
+                                        CMSSWcorrector)
+        elif testVariant=="Resolution":
+            CMSSWresult = getResolution(test["JetPt"],
+                                        test["JetEta"],
+                                        test["Rho"],
+                                        CMSSWcorrector)
+        elif testVariant=="ScaleFactor":
+            CMSSWresult = getScaleFactor(test["JetPt"],
+                                        test["JetEta"],
+                                        test["systematic"],
+                                        CMSSWcorrector)
+        evaluateList = [test[key] for key in inputsneeded]
+        JSONresult = libcorrector.evaluate(*evaluateList)
+        reldifference= 100*(JSONresult-CMSSWresult)/CMSSWresult
+        absdifference= abs(JSONresult-CMSSWresult)
+        reldifferences.append(reldifference)
+#        if abs(reldifference)>1e-4: 
+        if abs(reldifference)>1e-2 or absdifference>1e-3: 
+            print("pt {} eta{} rho {} JetA {}; JSON: {}; CMSSW: {}; relative difference [%] (100*(J-C)/C): {}".format(test["JetPt"], test["JetEta"], test["Rho"], test["JetA"], JSONresult, CMSSWresult, 100*(JSONresult-CMSSWresult)/CMSSWresult))
+            deviationsFound = True
+            with open(logpath, "a") as file_object:
+                file_object.write("pt {} eta{} rho {} JetA {}; JSON: {}; CMSSW: {}; relative difference [%] (100*(J-C)/C): {}\n".format(test["JetPt"], test["JetEta"], test["Rho"], test["JetA"], JSONresult, CMSSWresult, 100*(JSONresult-CMSSWresult)/CMSSWresult))
+        #print("pt {} eta{} rho {} JetA {}; JSON: {}; CMSSW: {}; relative difference [%] (100*(J-C)/C): {}".format(test["JetPt"], test["JetEta"], test["Rho"], test["JetA"], JSONresult, CMSSWresult, 100*(JSONresult-CMSSWresult)/CMSSWresult))    
+    
+    print("reldifferences max: {}; median: {}; mean: {}; stddev: {}; N: {}".format(max(reldifferences), median(reldifferences), mean(reldifferences),stdev(reldifferences), len(reldifferences)))
+    if deviationsFound: 
+        with open("testJSONlog.txt", "a") as file_object:
+            file_object.write("{}\n".format(libcorrector.name))
+        with open(logpath, "a") as file_object:
+            file_object.write("reldifferences max: {}; median: {}; mean: {}; stddev: {}; N: {}".format(max(reldifferences), median(reldifferences), mean(reldifferences),stdev(reldifferences), len(reldifferences)))
 
 
