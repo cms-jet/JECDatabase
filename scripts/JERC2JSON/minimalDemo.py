@@ -1,11 +1,11 @@
 import ROOT
 import correctionlib._core as core
 jec,algo,lvl,unc=("Summer19UL16_V7_MC","AK4PFchs","L2Relative","Total")
-pt,eta=(100.,0.)
-print("\JEC Parameters: ", jec, algo, lvl, unc,  pt, eta)
+pt,eta,rho,area=(100.,0.,15.,.5)
+print("\JEC Parameters: ", jec, algo, lvl, unc,  pt, eta, rho, area)
 
 print("\n\nSingle JEC level:\n===================")
-#CMSSW (JEC)
+#CMSSW (JEC,single)
 print("Opening {}/{}_{}_{}.txt".format(jec,jec,lvl,algo))
 vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
 vPar.push_back(ROOT.JetCorrectorParameters("{}/{}_{}_{}.txt".format(jec,jec,lvl,algo),""))
@@ -14,12 +14,36 @@ JetCorrector.setJetEta(eta)
 JetCorrector.setJetPt(pt)
 print("CMSSW result: {}".format(JetCorrector.getCorrection()))
 
-#JSON (JEC)
+#JSON (JEC,single)
 cset = core.CorrectionSet.from_file("2016_JERC_All.json.gz")
 print("JSON access to: {}_{}_{}".format(jec, lvl, algo))
 sf=cset["{}_{}_{}".format(jec, lvl, algo)]
 print([input.name for input in sf.inputs])
 print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+
+
+print("\n\nCompound JEC:\n===================")
+correctionLevels = ["L1FastJet",
+                    "L2Relative",
+                    "L3Absolute",
+                    "L2L3Residual",
+                ]
+#CMSSW (JEC,compound)
+vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
+for level in correctionLevels: vPar.push_back(ROOT.JetCorrectorParameters("{}/{}_{}_{}.txt".format(jec,jec,level,algo),""))
+CompoundJetCorrector = ROOT.FactorizedJetCorrector(vPar)
+CompoundJetCorrector.setJetEta(eta)
+CompoundJetCorrector.setJetPt(pt)
+CompoundJetCorrector.setJetA(area)
+CompoundJetCorrector.setRho(rho)
+print("CMSSW result: {}".format(CompoundJetCorrector.getCorrection()))
+
+
+#JSON (JEC,compound)
+sf=cset.compound["{}_{}_{}".format(jec, "L1L2L3Res", algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[area,eta,pt,rho])))
+
 
 print("\n\n JECSource:\n===========")
 #CMSSW (JECSource)

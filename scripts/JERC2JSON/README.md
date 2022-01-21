@@ -21,11 +21,12 @@ wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JEC2JSON
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/JERCHelpers.py
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/createJSONs.py
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/testJERCJSON.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JEC2JSON/miniDemo.py
 ```
 
 ## Usage
 
-The tool selection expects the JER/JEC files to be available as tarballs from the JEC/JR-databases on github. You can modify the behavior by editing JERCHelpers.py and creatJSONs.py, giving the list of parameters to be merged into subcategory, and then "per-year" files. An example to create the 2018_JERC_JSON file is given below. Uncertainty sources are only saved for the MC-tag.
+The tool collection expects the JER/JEC files to be available as tarballs from the JEC/JR-databases on github. You can modify the behavior by editing JERCHelpers.py and creatJSONs.py, giving the list of parameters to be merged into subcategory, and then "per-year" files. An example to create the 2018_JERC_JSON file is given below. Uncertainty sources are only saved for the MC-tag.
 ```
 ######################
 #JERCHelpers.py part #
@@ -64,11 +65,11 @@ After running the creation of JSON files the example below runs out of the box. 
 import ROOT
 import correctionlib._core as core
 jec,algo,lvl,unc=("Summer19UL16_V7_MC","AK4PFchs","L2Relative","Total")
-pt,eta=(100.,0.)
-print("\JEC Parameters: ", jec, algo, lvl, unc,  pt, eta)
+pt,eta,rho,area=(100.,0.,15.,.5)
+print("\JEC Parameters: ", jec, algo, lvl, unc,  pt, eta, rho, area)
 
 print("\n\nSingle JEC level:\n===================")
-#CMSSW (JEC)
+#CMSSW (JEC,single)
 print("Opening {}/{}_{}_{}.txt".format(jec,jec,lvl,algo))
 vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
 vPar.push_back(ROOT.JetCorrectorParameters("{}/{}_{}_{}.txt".format(jec,jec,lvl,algo),""))
@@ -77,12 +78,36 @@ JetCorrector.setJetEta(eta)
 JetCorrector.setJetPt(pt)
 print("CMSSW result: {}".format(JetCorrector.getCorrection()))
 
-#JSON (JEC)
+#JSON (JEC,single)
 cset = core.CorrectionSet.from_file("2016_JERC_All.json.gz")
 print("JSON access to: {}_{}_{}".format(jec, lvl, algo))
 sf=cset["{}_{}_{}".format(jec, lvl, algo)]
 print([input.name for input in sf.inputs])
 print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+
+
+print("\n\nCompound JEC:\n===================")
+correctionLevels = ["L1FastJet",
+                    "L2Relative",
+                    "L3Absolute",
+                    "L2L3Residual",
+                ]
+#CMSSW (JEC,compound)
+vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
+for level in correctionLevels: vPar.push_back(ROOT.JetCorrectorParameters("{}/{}_{}_{}.txt".format(jec,jec,level,algo),""))
+CompoundJetCorrector = ROOT.FactorizedJetCorrector(vPar)
+CompoundJetCorrector.setJetEta(eta)
+CompoundJetCorrector.setJetPt(pt)
+CompoundJetCorrector.setJetA(area)
+CompoundJetCorrector.setRho(rho)
+print("CMSSW result: {}".format(CompoundJetCorrector.getCorrection()))
+
+
+#JSON (JEC,compound)
+sf=cset.compound["{}_{}_{}".format(jec, "L1L2L3Res", algo)]
+print([input.name for input in sf.inputs])
+print("JSON result: {}".format(sf.evaluate(*[area,eta,pt,rho])))
+
 
 print("\n\n JECSource:\n===========")
 #CMSSW (JECSource)
@@ -140,10 +165,11 @@ print("JSON result: {}".format(sf.evaluate(*[eta,pt,rho])))
 
 
 ## Known issues/caveats remaining after arrival of schema v2
-- Small inconsistency for JR-factors at (eta) bin edges due to inconistent handling (JEC and JSON uniform vs. JR code including lower and upper edge of bins). To be addressed in a PR to CMSSW
-- Uncertainty sources takes up a lot of space. Needs formularef to emulate uncertainty-code interpolation for each pt/eta-bin + many sources. Close to 50MB for all sources when JSON not compressed
-- Todo: Use formularef also for regular JEC, if applicable
+- Small inconsistency for JR-factors at (eta) bin edges due to inconistent handling (JEC and JSON uniform vs. JR code including lower and upper edge of bins). Addressed in a PR to CMSSW (https://github.com/cms-sw/cmssw/pull/36759)
 - Single vs. double floating point precision related differences in JEC-calculation (CMSSW JetCorrectorParameters uses C-floats) - differences generally very small
 - correctionlib doesn't support TMath::XXX namespace. Currently only implemented replacement for "TMath::Log/Power/Max"-->"log/pow/max", but there are other occurences of TMath in [very] old JEC txt-files. More replacements can be added as the conversion happens and TMath::XXX shouldgenerally be avoided in new JEC txt files.
+## Possible next improvements
+- Uncertainty sources takes up a lot of space. Needs formularef to emulate uncertainty-code interpolation for each pt/eta-bin + many sources. Close to 50MB for all sources when JSON not compressed
+- Use formularef also for regular JEC, if applicable
 
 
