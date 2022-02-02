@@ -6,16 +6,21 @@ import re
 import os
 from statistics import mean, median, stdev
 
-JEC2016=[
+JEC2016preVFP=[
 "Summer19UL16APV_RunBCD_V7_DATA",
 "Summer19UL16APV_RunEF_V7_DATA",
 "Summer19UL16APV_V7_MC",
+]
+
+JER2016preVFP=[
+"Summer20UL16APV_JRV3_MC",
+]
+JEC2016postVFP=[
 "Summer19UL16_RunFGH_V7_DATA",
 "Summer19UL16_V7_MC",
 ]
 
-JER2016=[
-"Summer20UL16APV_JRV3_MC",
+JER2016postVFP=[
 "Summer20UL16_JRV3_MC"
 ]
 
@@ -29,7 +34,7 @@ JEC2017=[
 ]
 
 JER2017=[
-"Summer19UL17_JRV3_MC",
+"Summer19UL17_JRV2_MC",
 ]
 
 JEC2018=[
@@ -50,8 +55,8 @@ algosToConsider=[
 ]
 
 resolutionLevels = ["PtResolution",
-                    "EtaResolution", 
-                    "PhiResolution",
+#                    "EtaResolution", 
+#                    "PhiResolution",
                     "ScaleFactor"
                 ]
 
@@ -183,7 +188,7 @@ def getCompoundJEC(allInputs, corrLevels, baseInputName, AlgoType):
     compJEC = CompoundCorrection.parse_obj(
         {
             "name": "{}_L1L2L3Res_{}".format(baseInputName,AlgoType),
-            "description": "compound correction created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JEC2JSON.py".format(baseInputName),
+            "description": "compound correction created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py".format(baseInputName),
             "inputs": [
                 {"name": item, "type": inputTypeMap[item], "description" : inputDescriptionMap[item]} for item in allInputs
             ],
@@ -205,7 +210,7 @@ def getIndivCorrectionLevel(jcparams,inputs, corrLevel, baseInputName, AlgoType)
         {
             "version": 1,
             "name": "{}_{}_{}".format(baseInputName, corrLevel, AlgoType),
-            "description": "{} for {} created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JE[R/C]2JSON.py".format(corrLevel, AlgoType, baseInputName),
+            "description": "{} for {} created from {} by using https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py".format(corrLevel, AlgoType, baseInputName),
             "inputs": [
                 {"name": item, "type": inputTypeMap[item], "description" : inputDescriptionMap[item]} for item in inputs
             ]+systInputs,
