@@ -124,23 +124,8 @@ if args.inputTXT is not None and args.inputJSON is not None:
     
 
 
-testSingleYearJSON(JER2016,JEC2016,algosToConsider,"2016_JERC_All.json.gz")
-testSingleYearJSON(JER2017,JEC2017,algosToConsider,"2017_JERC_All.json.gz")
-testSingleYearJSON(JER2018,JEC2018,algosToConsider,"2018_JERC_All.json.gz")
+testSingleYearJSON(JER2016preVFP, JEC2016preVFP,  algosToConsider,"2016preVFP_UL/UL16preVFP_jerc.json.gz")
+testSingleYearJSON(JER2016postVFP,JEC2016postVFP, algosToConsider,"2016postVFP_UL/UL16postVFP_jerc.json.gz")
+testSingleYearJSON(JER2017,       JEC2017,        algosToConsider,"2017_UL/UL17_jerc.json.gz")
+testSingleYearJSON(JER2018,       JEC2018,        algosToConsider,"2018_UL/UL18_jerc.json.gz")
 
-
-
-#exit(0)
-
-#Summer19UL16APV_RunBCD_V7_DATA_UncertaintySources_AK4PFchs.txt
-
-
-#print("Testing resolution")
-
-
-#import correctionlib.highlevel
-
-#uncsetforJSON = correctionlib.highlevel.CorrectionSet("merged.json")
-
-#with gzip.open("mergedNew.json.gz", "wt") as fout:
-#    fout.write(uncsetforJSON.json(exclude_unset=True))
