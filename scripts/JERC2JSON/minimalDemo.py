@@ -15,11 +15,11 @@ JetCorrector.setJetPt(pt)
 print("CMSSW result: {}".format(JetCorrector.getCorrection()))
 
 #JSON (JEC,single)
-cset = core.CorrectionSet.from_file("2016_JERC_All.json.gz")
+cset = core.CorrectionSet.from_file("2016postVFP_UL/UL16postVFP_jerc.json.gz")#2016_JERC_All.json.gz")
 print("JSON access to: {}_{}_{}".format(jec, lvl, algo))
 sf=cset["{}_{}_{}".format(jec, lvl, algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+print("JSON result: {}".format(sf.evaluate(eta,pt)))
 
 
 print("\n\nCompound JEC:\n===================")
@@ -42,7 +42,7 @@ print("CMSSW result: {}".format(CompoundJetCorrector.getCorrection()))
 #JSON (JEC,compound)
 sf=cset.compound["{}_{}_{}".format(jec, "L1L2L3Res", algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[area,eta,pt,rho])))
+print("JSON result: {}".format(sf.evaluate(area,eta,pt,rho)))
 
 
 print("\n\n JECSource:\n===========")
@@ -55,7 +55,8 @@ print("CMSSW result: {}".format(TotalUncertainty.getUncertainty(True)))
 #JSON (JECSource)
 sf=cset["{}_{}_{}".format(jec, unc, algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[eta,pt])))
+print("JSON result: {}".format(sf.evaluate(eta,pt)))
+
 
 
 jer,algo,syst=("Summer20UL16_JRV3_MC","AK4PFchs","nom")
@@ -78,7 +79,7 @@ print("CMSSW result: {}".format(jerSF_and_Uncertainty.getScaleFactor(params_sf_a
 #JSON (JER scale factor)
 sf=cset["{}_ScaleFactor_{}".format(jer, algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[eta,syst])))
+print("JSON result: {}".format(sf.evaluate(eta,syst)))
 
 
 print("\n\n PtResolution:\n==============")
@@ -95,6 +96,6 @@ print("CMSSW result: {}".format(jerobj.getResolution(params_resolution)))
 #JSON (JER scale factor)
 sf=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[eta,pt,rho])))
+print("JSON result: {}".format(sf.evaluate(eta,pt,rho)))
 
 

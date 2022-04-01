@@ -46,7 +46,11 @@ from correctionlib import schemav2 as schema
 
 uncertaintiesParsed=[]
 for source in SourceSections:
-    uncertaintiesParsed.append(getIndivCorrectionLevel(vPar[source],["JetPt","JetEta"],source,baseInputName, args.AlgoType))
+    inputsneeded = set() #we only need the input variables set once, even if used multiple times, so filter out overlap 
+    for i in range(0,vPar[source].definitions().nParVar()): inputsneeded.add(vPar[source].definitions().parVar(i)) 
+    for i in range(0,vPar[source].definitions().nBinVar()): inputsneeded.add(vPar[source].definitions().binVar(i)) 
+    inputsneeded = list(sorted(inputsneeded))
+    uncertaintiesParsed.append(getIndivCorrectionLevel(vPar[source],inputsneeded,source,baseInputName, args.AlgoType))
 
 
 parsedCorrections = []
