@@ -153,7 +153,7 @@ def build_formula(jcparams,recordi):
 def recurseThroughBinningToFormula(jcparams, binvari, recordi):
     if binvari>=jcparams.definitions().nBinVar():
         return build_formula(jcparams,recordi) #"formula and params"
-    logging.info("start recusing binvar {}".format(jcparams.definitions().binVar(binvari)))
+    logging.debug("start recusing binvar {}".format(jcparams.definitions().binVar(binvari)))
     logging.debug("collecting edges via neighbours...")
     edges = []
     edgeidx = []
@@ -165,7 +165,7 @@ def recurseThroughBinningToFormula(jcparams, binvari, recordi):
         edgeidx.append(findnext)
         edges.append(float(str(np.single(jcparams.record(findnext).xMax(binvari)))))
         findnext = jcparams.neighbourBin(findnext,binvari,True)
-    logging.debug(edges, edgeidx)
+    logging.debug(" ".join(map(str, edges + edgeidx)))
 
     return Binning.parse_obj({
         "nodetype": "binning",
