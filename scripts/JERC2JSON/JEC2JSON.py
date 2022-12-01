@@ -4,6 +4,7 @@ import argparse
 import logging
 import re
 import os
+import shutil
 
 from JERCHelpers import *
 
@@ -13,9 +14,21 @@ parser = argparse.ArgumentParser()
 parser.add_argument("inputTXT", help = "base name of JEC txt-files (e.g. Summer19UL16APV_V2_MC); L1/L2/L3/L2L3Residual PFCHS corrections will be merged into a single JSON")
 parser.add_argument("-o", "--Output", help = "define path for output JSON (default: input path + \".json\")")
 parser.add_argument("-a", "--AlgoType", default="AK4PFchs", help = "define jet type for which JSON is created")
+parser.add_argument("-l", "--ExtraLoggingLevel", default="INFO", help = "choose level of additional logging file (default INFO; other useful choices: DEBUG)")
 args = parser.parse_args()
 baseInputName = os.path.basename(args.inputTXT)
 
+h1 = logging.FileHandler("WarningsAndErrors_JSONConversion.log"); h1.setLevel(logging.WARNING)
+h2 = logging.FileHandler("EXTRA_JSONConversion.log"); h2.setLevel(args.ExtraLoggingLevel)
+h3 = logging.StreamHandler(); h3.setLevel(logging.INFO)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        h1,h2,h3
+    ]
+)
 
 output="{}_{}.json".format(args.inputTXT,args.AlgoType)
 if args.Output!=None: output= args.output
@@ -32,14 +45,19 @@ for lvl in correctionLevels:
 
 SourceSections = []
 if "MC" in args.inputTXT: #only provide uncertainty sources for MC
-    with open('{}/{}_UncertaintySources_{}.txt'.format(args.inputTXT,args.inputTXT,args.AlgoType),'r') as f:
+    shutil.copy2('{}/{}_UncertaintySources_{}.txt'.format(args.inputTXT,args.inputTXT,args.AlgoType), '{}/tmp_sources.txt'.format(args.inputTXT))
+    RegroupedFileName = '{}/RegroupedV2_{}_UncertaintySources_{}.txt'.format(args.inputTXT,args.inputTXT,args.AlgoType)
+    if os.path.isfile(RegroupedFileName):
+        os.system("sed 's/^\[/\[Regrouped_/' {} >> {}/tmp_sources.txt".format(RegroupedFileName,args.inputTXT))
+    else: logging.warning("No regrouped input file found for era {} algo {}. Will proceed without regrouped inputs".format(args.inputTXT,args.AlgoType))
+    with open('{}/tmp_sources.txt'.format(args.inputTXT),'r') as f:
         #  SourceSections = ["{}_{}".format(line.strip().strip('[]'),args.AlgoType) for line in f if line.startswith('[')]
         SourceSections = [line.strip().strip('[]') for line in f if line.startswith('[')]
 
 
 vPar = {}#ROOT.vector(ROOT.JetCorrectorParameters)()
 for source in SourceSections:
-    vPar[source]=ROOT.JetCorrectorParameters('{}/{}_UncertaintySources_{}.txt'.format(args.inputTXT,args.inputTXT,args.AlgoType),source)
+    vPar[source]=ROOT.JetCorrectorParameters('{}/tmp_sources.txt'.format(args.inputTXT),source)
 
 from correctionlib.schemav2 import Correction, Binning, Category, Formula, FormulaRef, CompoundCorrection
 from correctionlib import schemav2 as schema
@@ -51,7 +69,7 @@ for source in SourceSections:
     for i in range(0,vPar[source].definitions().nBinVar()): inputsneeded.add(vPar[source].definitions().binVar(i)) 
     inputsneeded = list(sorted(inputsneeded))
     uncertaintiesParsed.append(getIndivCorrectionLevel(vPar[source],inputsneeded,source,baseInputName, args.AlgoType))
-
+if os.path.isfile('{}/tmp_sources.txt'.format(args.inputTXT)): os.remove('{}/tmp_sources.txt'.format(args.inputTXT))
 
 parsedCorrections = []
 inputsAllLevels = set()
@@ -64,7 +82,7 @@ for idx,JECParams in enumerate(JECParamsIndiv):
      inputsneeded = list(sorted(inputsneeded))
      inputsAllLevels.update(inputsneeded)
      #if 
-     logging.info("Inputs needed for binning and formula evaluation: ", inputsneeded)
+     logging.info("Inputs needed for binning and formula evaluation: {}".format(" ".join(inputsneeded)))
      parsedCorrections.append(getIndivCorrectionLevel(JECParams,inputsneeded,correctionLevels[idx],baseInputName, args.AlgoType))
 
 inputsAllLevels = list(sorted(inputsAllLevels))

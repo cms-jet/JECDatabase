@@ -7,16 +7,26 @@ import os
 
 from JERCHelpers import *
 
-
 parser = argparse.ArgumentParser()
  
 # Adding optional argument
 parser.add_argument("inputTXT", help = "base name of JER txt-files (e.g. Summer20UL16_JRV3_MC); Pt/Eta/PhiRes and SFs will be merged into a single JSON file")
 parser.add_argument("-o", "--Output", help = "define path for output JSON (default: input path + \"_\" + algotype + \".json\")")
 parser.add_argument("-a", "--AlgoType", default="AK4PFchs", help = "define jet type for which JSON is created")
-args = parser.parse_args()
+parser.add_argument("-l", "--ExtraLoggingLevel", default="INFO", help = "choose level of additional logging file (default INFO; other useful choices: DEBUG)")args = parser.parse_args()
 baseInputName = os.path.basename(args.inputTXT)
 
+h1 = logging.FileHandler("WarningsAndErrors_JSONConversion.log"); h1.setLevel(logging.WARNING)
+h2 = logging.FileHandler("EXTRA_JSONConversion.log"); h2.setLevel(args.ExtraLoggingLevel)
+h3 = logging.StreamHandler(); h3.setLevel(logging.INFO)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        h1,h2,h3
+    ]
+)
 
 output="{}_{}.json".format(args.inputTXT,args.AlgoType)
 if args.Output!=None: output= args.output
