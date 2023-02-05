@@ -11,20 +11,25 @@ import subprocess
 import glob
 import os
 
-vetomaps = [ "Winter22Run3",
-           # "Summer19UL18_V1"
+vetomaps = ["Winter22Run3",
+            "Summer19UL18_V1",
+            "Summer19UL17_V2",
+            "Summer19UL16_V0"
            ]
-rootFiles = {}
-
+arrFiles = []
 for p in vetomaps:
+    rootFile ={}
     subprocess.Popen("svn export --force https://github.com/cms-jet/JECDatabase/trunk/jet_veto_maps/{}".format(p), stdout=subprocess.PIPE, shell=True)
-    filelist = glob.glob(p + "/*.root")
-    keys = [filename.split(p+"/")[1].split(".root")[0].split("_v")[0] for filename in filelist]
-    rootFiles[p] = dict(zip(keys, filelist))
-print("Converting veto maps for the following into JSON: ", rootFiles)
+    filelist = glob.glob(p + "/" + p + "*.root")
+    keys = [filename.split(p+"/")[1].rsplit("_", 1)[0] for filename in filelist]
+    for k, f in zip(keys, filelist):
+        rootFile[k+"_V1"] = f
+    arrFiles.append(rootFile)
+print("Converting veto maps for the following into JSON: \n")
+print(json.dumps(arrFiles, indent = 2))
 
-def getContent(vetomaps, year, hname):
-    file = uproot.open(vetomaps[year])
+def getContent(vetomaps, hname):
+    file = uproot.open(vetomaps)
     h = file[hname].to_hist()
     X, Y = h.axes.edges
     values = list((h.values()).flatten())
@@ -40,58 +45,48 @@ def getContent(vetomaps, year, hname):
         })
     return output
 
-def getVetoMap(vetomaps):
-    output = schema.Category.parse_obj({
-                "nodetype": "category",
-                "input": "year",
-                "content":[
-                    schema.CategoryItem.parse_obj({
-                        "key": year, 
-                        "value": schema.Category.parse_obj({
-                            "nodetype": "category",
-                            "input": "hname",
-                            "content":[
-                                schema.CategoryItem.parse_obj({
-                                        "key": hname.split(";")[0], 
-                                        "value": getContent(vetomaps, year, hname)})
-                                for hname in uproot.open(vetomaps[year]).keys()
-                                ],
-                            })
-                    })
-                    for year in vetomaps.keys()
-                ],
-    })
-    return output
-
 def main():
-    for p in vetomaps:
-        name        = p + "_JetVetoMaps"
-        print("\n Writing jet veto maps for {} into JSON...".format(p))
-        description = "These are the jet veto maps showing regions with an excess of jets (hot zones) and lack of jets (cold zones). Using the phi-symmetry of the CMS detector, these areas with\
-                       detector and or calibration issues can be pinpointed."
-        version     = 1
-        inputs      = [{"name": "year","type" : "string", "description": "year/scenario: example Winter22_RunCD etc"},
-                       {"name": "hname","type": "string", "description": "name of the type of veto map: example 'jetvetomap' etc"},
-                       {"name": "eta", "type" : "real", "description"  : "jet eta"},
-                       {"name": "phi", "type" : "real", "description"  : "jet phi"},
-                      ]
-        output      = {"name"      : "vetomaps",
-                       "type"       : "real",
-                       "description": "Non-zero value for (eta, phi) indicates that the region is vetoed."}
-        corr = Correction.parse_obj({
-            "version"     : version,
-            "name"        : name,
-            "description" : description,
-            "inputs"      : inputs,
-            "output"      : output,
-            "data"        : getVetoMap(rootFiles[p]),
-            })
-        print("These are the jet veto maps for {}".format(list(rootFiles[p].keys())))
-
+    for rootFiles in arrFiles:
+        corrs=[]
+        for p in rootFiles.keys():
+            print(p)
+            name        = p
+            description = "These are the jet veto maps showing regions with an excess of jets (hot zones) and lack of jets (cold zones). Using the phi-symmetry of the CMS detector, these areas with detector and or calibration issues can be pinpointed."
+            version     = 1
+            inputs      = [
+                           {"name": "type","type": "string", "description": "name of the type of veto map. The recommended map for analyses is 'jetvetomap'."},
+                           {"name": "eta", "type" : "real", "description"  : "jet eta"},
+                           {"name": "phi", "type" : "real", "description"  : "jet phi"},
+                          ]
+            output      = {"name"      : "vetomaps",
+                           "type"       : "real",
+                           "description": "Non-zero value for (eta, phi) indicates that the region is vetoed."}
+            data        = schema.Category.parse_obj({"nodetype": "category",
+                                                     "input": "type",
+                                                     "content":[
+                                                         schema.CategoryItem.parse_obj({
+                                                             "key": hname.split(";")[0],
+                                                             "value": getContent(rootFiles[p], hname)})
+                                                         for hname in uproot.open(rootFiles[p]).keys()
+                                                     ],
+                                                    })
+            corr = Correction.parse_obj({
+                "version"     : version,
+                "name"        : name,
+                "description" : description,
+                "inputs"      : inputs,
+                "output"      : output,
+                "data"        : data,
+                })
+            print("These are the jet veto maps for {}".format(p))
+            corrs.append(corr)
         cset = CorrectionSet(schema_version=2,
-                             corrections=[corr],
-                             description="These are the jet veto maps for {}".format(list(rootFiles[p].keys())))
-        outName = p + "_jetvetomaps.json"
+                             corrections=corrs,
+                             description="These are the jet veto maps for {}. The recommended veto maps to be applied to both data and MC for analysis is 'jetvetomap'.".format(list(rootFiles.keys())))
+
+        p = "vetomapsJSON/" + p
+        os.system("mkdir -p " + p)
+        outName = p + "/jetvetomaps.json"
         os.system("rm " + outName)
         with open( outName, "w") as fout:
             fout.write(cset.json(exclude_unset=True, indent=2))
@@ -100,6 +95,7 @@ def main():
         print("rm {}.gz".format(outName))
         print("gzip {}".format(outName))
         os.system("gzip " + outName)
+        print("#### Compressed and done writing {}.json.gz \n".format(outName))
 
 if __name__ == "__main__":
     main()
