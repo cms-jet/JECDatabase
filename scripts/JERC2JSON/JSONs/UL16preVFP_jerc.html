@@ -6,6 +6,8 @@
 .r2 {color: #000080; text-decoration-color: #000080}
 .r3 {font-weight: bold}
 .r4 {font-style: italic}
+.r6 {color: #800000; text-decoration-color: #800000; font-weight: bold}
+.r7 {color: #008000; text-decoration-color: #008000; font-weight: bold}
 body {
     color: #000000;
     background-color: #ffffff;
@@ -20,7 +22,7 @@ body {
 Merged from Summer20UL16APV_JRV3_MC_AK4PFchs.json.gz Summer20UL16APV_JRV3_MC_AK8PFPuppi.json.gz     
 Summer19UL16APV_RunBCD_V7_DATA_AK4PFchs.json.gz Summer19UL16APV_RunBCD_V7_DATA_AK8PFPuppi.json.gz   
 Summer19UL16APV_RunEF_V7_DATA_AK4PFchs.json.gz Summer19UL16APV_RunEF_V7_DATA_AK8PFPuppi.json.gz     
-Summer19UL16APV_V7_MC_AK4PFchs.json.gz Summer19UL16APV_V7_MC_AK8PFPuppi.json.gz                     
+Summer19UL16APV_V7_MC_AK4PFchs.json.gz Summer19UL16APV_V7_MC_AK8PFPuppi.json.gz JERSmear.json.gz    
 📂                                                                                                  
 <span class="r5">├── </span>📈 <span class="r3">Summer20UL16APV_JRV3_MC_PtResolution_AK4PFchs</span> (v1)                                           
 <span class="r5">│   </span>PtResolution for AK4PFchs created from Summer20UL16APV_JRV3_MC by using                         
@@ -2728,24 +2730,238 @@ Summer19UL16APV_V7_MC_AK4PFchs.json.gz Summer19UL16APV_V7_MC_AK8PFPuppi.json.gz
 <span class="r5">│   </span>│ <span class="r3">correction</span> (real) │                                                                           
 <span class="r5">│   </span>│ <span class="r4">No description</span>    │                                                                           
 <span class="r5">│   </span>╰───────────────────╯                                                                           
-<span class="r5">└── </span>📈 <span class="r3">Summer19UL16APV_V7_MC_CorrelationGroupUncorrelated_AK8PFPuppi</span> (v1)                           
-<span class="r5">    </span>CorrelationGroupUncorrelated for AK8PFPuppi created from Summer19UL16APV_V7_MC by using         
+<span class="r5">├── </span>📈 <span class="r3">Summer19UL16APV_V7_MC_CorrelationGroupUncorrelated_AK8PFPuppi</span> (v1)                           
+<span class="r5">│   </span>CorrelationGroupUncorrelated for AK8PFPuppi created from Summer19UL16APV_V7_MC by using         
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>Node counts: <span class="r3">Binning</span>: 41, <span class="r3">FormulaRef</span>: 1960, <span class="r3">Formula</span>: 1                                          
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>│ Range: [-5.4, 5.4), overflow ok                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ Range: [-inf, inf), overflow ok                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭──── ◀ output ─────╮                                                                           
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real) │                                                                           
+<span class="r5">│   </span>│ <span class="r4">No description</span>    │                                                                           
+<span class="r5">│   </span>╰───────────────────╯                                                                           
+<span class="r5">├── </span>📈 <span class="r3">JERSmear</span> (v1)                                                                                
+<span class="r5">│   </span>Jet smearing tool                                                                               
+<span class="r5">│   </span>Node counts: <span class="r3">Binning</span>: 1, <span class="r3">Transform</span>: 1, <span class="r3">Formula</span>: 2                                               
+<span class="r5">│   </span>╭────────────── ▶ input ───────────────╮ ╭──────────── ▶ input ────────────╮                    
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                         │ │ <span class="r3">JetEta</span> (real)                   │                    
+<span class="r5">│   </span>│ <span class="r4">No description</span>                       │ │ <span class="r4">No description</span>                  │                    
+<span class="r5">│   </span>│ Range: [-inf, inf), overflow ok      │ │ Range: <span class="r6">unused</span>, overflow ok      │                    
+<span class="r5">│   </span>╰──────────────────────────────────────╯ ╰─────────────────────────────────╯                    
+<span class="r5">│   </span>╭────────────── ▶ input ───────────────╮ ╭──────────── ▶ input ────────────╮                    
+<span class="r5">│   </span>│ <span class="r3">GenPt</span> (real)                         │ │ <span class="r3">Rho</span> (real)                      │                    
+<span class="r5">│   </span>│ matched GenJet pt, or -1 if no match │ │ entropy source                  │                    
+<span class="r5">│   </span>│ Range: [-inf, inf), overflow ok      │ │ Range: <span class="r6">unused</span>, overflow ok      │                    
+<span class="r5">│   </span>│ <span class="r6">has transform</span>                        │ ╰─────────────────────────────────╯                    
+<span class="r5">│   </span>╰──────────────────────────────────────╯                                                        
+<span class="r5">│   </span>╭────────────── ▶ input ───────────────╮ ╭──────────── ▶ input ────────────╮                    
+<span class="r5">│   </span>│ <span class="r3">EventID</span> (int)                        │ │ <span class="r3">JER</span> (real)                      │                    
+<span class="r5">│   </span>│ entropy source                       │ │ Jet energy resolution           │                    
+<span class="r5">│   </span>│ Values:                              │ │ Range: [-inf, inf), overflow ok │                    
+<span class="r5">│   </span>╰──────────────────────────────────────╯ ╰─────────────────────────────────╯                    
+<span class="r5">│   </span>╭────────────── ▶ input ───────────────╮                                                        
+<span class="r5">│   </span>│ <span class="r3">JERsf</span> (real)                         │                                                        
+<span class="r5">│   </span>│ Jet energy resolution scale factor   │                                                        
+<span class="r5">│   </span>│ Range: [-inf, inf), overflow ok      │                                                        
+<span class="r5">│   </span>╰──────────────────────────────────────╯                                                        
+<span class="r5">│   </span>╭─── ◀ output ───╮                                                                              
+<span class="r5">│   </span>│ <span class="r3">smear</span> (real)   │                                                                              
+<span class="r5">│   </span>│ <span class="r4">No description</span> │                                                                              
+<span class="r5">│   </span>╰────────────────╯                                                                              
+<span class="r5">├── </span>📈📈 <span class="r3">Summer19UL16APV_RunBCD_V7_DATA_L1L2L3Res_AK4PFchs</span>                                          
+<span class="r5">│   </span>compound correction created from Summer19UL16APV_RunBCD_V7_DATA by using                        
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>╭────────────────────── 🔢 stack ──────────────────────╮                                        
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L1FastJet_AK4PFchs    │                                        
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L2Relative_AK4PFchs   │                                        
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L3Absolute_AK4PFchs   │                                        
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L2L3Residual_AK4PFchs │                                        
+<span class="r5">│   </span>╰──────────────────────────────────────────────────────╯                                        
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">│   </span>│ area of the jet                                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">│   </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">│   </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">│   </span>│ Update operation: (*) │                                                                       
+<span class="r5">│   </span>╰───────────────────────╯                                                                       
+<span class="r5">├── </span>📈📈 <span class="r3">Summer19UL16APV_RunBCD_V7_DATA_L1L2L3Res_AK8PFPuppi</span>                                        
+<span class="r5">│   </span>compound correction created from Summer19UL16APV_RunBCD_V7_DATA by using                        
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>╭─────────────────────── 🔢 stack ───────────────────────╮                                      
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L1FastJet_AK8PFPuppi    │                                      
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L2Relative_AK8PFPuppi   │                                      
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L3Absolute_AK8PFPuppi   │                                      
+<span class="r5">│   </span>│ Summer19UL16APV_RunBCD_V7_DATA_L2L3Residual_AK8PFPuppi │                                      
+<span class="r5">│   </span>╰────────────────────────────────────────────────────────╯                                      
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">│   </span>│ area of the jet                                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">│   </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">│   </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">│   </span>│ Update operation: (*) │                                                                       
+<span class="r5">│   </span>╰───────────────────────╯                                                                       
+<span class="r5">├── </span>📈📈 <span class="r3">Summer19UL16APV_RunEF_V7_DATA_L1L2L3Res_AK4PFchs</span>                                           
+<span class="r5">│   </span>compound correction created from Summer19UL16APV_RunEF_V7_DATA by using                         
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>╭───────────────────── 🔢 stack ──────────────────────╮                                         
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L1FastJet_AK4PFchs    │                                         
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L2Relative_AK4PFchs   │                                         
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L3Absolute_AK4PFchs   │                                         
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L2L3Residual_AK4PFchs │                                         
+<span class="r5">│   </span>╰─────────────────────────────────────────────────────╯                                         
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">│   </span>│ area of the jet                                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">│   </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">│   </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">│   </span>│ Update operation: (*) │                                                                       
+<span class="r5">│   </span>╰───────────────────────╯                                                                       
+<span class="r5">├── </span>📈📈 <span class="r3">Summer19UL16APV_RunEF_V7_DATA_L1L2L3Res_AK8PFPuppi</span>                                         
+<span class="r5">│   </span>compound correction created from Summer19UL16APV_RunEF_V7_DATA by using                         
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>╭────────────────────── 🔢 stack ───────────────────────╮                                       
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L1FastJet_AK8PFPuppi    │                                       
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L2Relative_AK8PFPuppi   │                                       
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L3Absolute_AK8PFPuppi   │                                       
+<span class="r5">│   </span>│ Summer19UL16APV_RunEF_V7_DATA_L2L3Residual_AK8PFPuppi │                                       
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────╯                                       
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">│   </span>│ area of the jet                                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">│   </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">│   </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">│   </span>│ Update operation: (*) │                                                                       
+<span class="r5">│   </span>╰───────────────────────╯                                                                       
+<span class="r5">├── </span>📈📈 <span class="r3">Summer19UL16APV_V7_MC_L1L2L3Res_AK4PFchs</span>                                                   
+<span class="r5">│   </span>compound correction created from Summer19UL16APV_V7_MC by using                                 
+<span class="r5">│   </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
+<span class="r5">│   </span>╭───────────────── 🔢 stack ──────────────────╮                                                 
+<span class="r5">│   </span>│ Summer19UL16APV_V7_MC_L1FastJet_AK4PFchs    │                                                 
+<span class="r5">│   </span>│ Summer19UL16APV_V7_MC_L2Relative_AK4PFchs   │                                                 
+<span class="r5">│   </span>│ Summer19UL16APV_V7_MC_L3Absolute_AK4PFchs   │                                                 
+<span class="r5">│   </span>│ Summer19UL16APV_V7_MC_L2L3Residual_AK4PFchs │                                                 
+<span class="r5">│   </span>╰─────────────────────────────────────────────╯                                                 
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">│   </span>│ area of the jet                                                                   │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
+<span class="r5">│   </span>│ pseudorapidity of the jet                                                         │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
+<span class="r5">│   </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
+<span class="r5">│   </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">│   </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">│   </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">│   </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">│   </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">│   </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">│   </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">│   </span>│ Update operation: (*) │                                                                       
+<span class="r5">│   </span>╰───────────────────────╯                                                                       
+<span class="r5">└── </span>📈📈 <span class="r3">Summer19UL16APV_V7_MC_L1L2L3Res_AK8PFPuppi</span>                                                 
+<span class="r5">    </span>compound correction created from Summer19UL16APV_V7_MC by using                                 
 <span class="r5">    </span>https://github.com/cms-jet/JECDatabase/tree/master/scripts/JERC2JSON/createJSONs.py             
-<span class="r5">    </span>Node counts: <span class="r3">Binning</span>: 41, <span class="r3">FormulaRef</span>: 1960, <span class="r3">Formula</span>: 1                                          
+<span class="r5">    </span>╭────────────────── 🔢 stack ───────────────────╮                                               
+<span class="r5">    </span>│ Summer19UL16APV_V7_MC_L1FastJet_AK8PFPuppi    │                                               
+<span class="r5">    </span>│ Summer19UL16APV_V7_MC_L2Relative_AK8PFPuppi   │                                               
+<span class="r5">    </span>│ Summer19UL16APV_V7_MC_L3Absolute_AK8PFPuppi   │                                               
+<span class="r5">    </span>│ Summer19UL16APV_V7_MC_L2L3Residual_AK8PFPuppi │                                               
+<span class="r5">    </span>╰───────────────────────────────────────────────╯                                               
+<span class="r5">    </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">    </span>│ <span class="r3">JetA</span> (real)                                                                       │           
+<span class="r5">    </span>│ area of the jet                                                                   │           
+<span class="r5">    </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
 <span class="r5">    </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
 <span class="r5">    </span>│ <span class="r3">JetEta</span> (real)                                                                     │           
 <span class="r5">    </span>│ pseudorapidity of the jet                                                         │           
-<span class="r5">    </span>│ Range: [-5.4, 5.4), overflow ok                                                   │           
 <span class="r5">    </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
 <span class="r5">    </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
 <span class="r5">    </span>│ <span class="r3">JetPt</span> (real)                                                                      │           
 <span class="r5">    </span>│ pT of the jet before specific correction (for JER: after all corrections applied) │           
-<span class="r5">    </span>│ Range: [-inf, inf), overflow ok                                                   │           
+<span class="r5">    </span>│ <span class="r7">updated by stack using (*)</span>                                                        │           
 <span class="r5">    </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
-<span class="r5">    </span>╭──── ◀ output ─────╮                                                                           
-<span class="r5">    </span>│ <span class="r3">correction</span> (real) │                                                                           
-<span class="r5">    </span>│ <span class="r4">No description</span>    │                                                                           
-<span class="r5">    </span>╰───────────────────╯                                                                           
+<span class="r5">    </span>╭───────────────────────────────────── ▶ input ─────────────────────────────────────╮           
+<span class="r5">    </span>│ <span class="r3">Rho</span> (real)                                                                        │           
+<span class="r5">    </span>│ energy density rho (as measure of PU)                                             │           
+<span class="r5">    </span>╰───────────────────────────────────────────────────────────────────────────────────╯           
+<span class="r5">    </span>╭────── ◀ output ───────╮                                                                       
+<span class="r5">    </span>│ <span class="r3">correction</span> (real)     │                                                                       
+<span class="r5">    </span>│ <span class="r4">No description</span>        │                                                                       
+<span class="r5">    </span>│ Update operation: (*) │                                                                       
+<span class="r5">    </span>╰───────────────────────╯                                                                       
 </pre>
     </code>
 </body>

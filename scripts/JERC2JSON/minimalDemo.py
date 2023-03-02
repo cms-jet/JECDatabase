@@ -60,8 +60,8 @@ print("JSON result: {}".format(sf.evaluate(eta,pt)))
 
 
 jer,algo,syst=("Summer20UL16_JRV3_MC","AK4PFchs","nom")
-pt,eta,rho=(100.,0.,15.)
-print("\n\n JER parameters: ", jer, algo, lvl, syst,  pt, eta)
+pt,pt_gen,eta,rho=(100.,98.,0.,15.)
+print("\n\n JER parameters: ", jer, algo, lvl, syst,  pt, pt_gen, eta, rho)
 
 print("\n\n JER SF:\n=========")
 #CMSSW (JER scale factor)
@@ -93,9 +93,20 @@ params_resolution.setRho(rho)
 print("CMSSW result: {}".format(jerobj.getResolution(params_resolution)))
 
 
-#JSON (JER scale factor)
+#JSON (JER resolution)
 sf=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)]
 print([input.name for input in sf.inputs])
 print("JSON result: {}".format(sf.evaluate(eta,pt,rho)))
 
 
+
+print("\n\n JER Smearing (JSON only):\n==============")
+event_id = 999
+jecFactor = cset.compound["{}_{}_{}".format(jec, "L1L2L3Res", algo)].evaluate(area,eta,pt,rho)
+pt_jec = pt * jecFactor
+jerpt=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)].evaluate(eta,pt,rho)
+ptgen = pt_gen if abs(pt_jec - pt_gen) < 3*pt_jec*jerpt else -1.0
+jersf = cset["{}_ScaleFactor_{}".format(jer, algo)].evaluate(eta,syst)
+jersmear = cset["JERSmear"].evaluate(pt_jec, eta, ptgen, rho, event_id, jerpt, jersf)
+pt_final = pt_jec * jersmear
+print("ptraw: {:.2f}; pt_jec: {:.2f}; pt_final: {:.2f}; pt_gen: {:.2f}".format(pt,pt_jec,pt_final,pt_gen))
