@@ -21,7 +21,7 @@ wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/JEC2JSO
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/JERCHelpers.py
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/createJSONs.py
 wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/testJERCJSON.py
-wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/miniDemo.py
+wget https://github.com/cms-jet/JECDatabase/raw/master/scripts/JERC2JSON/minimalDemo.py
 ```
 
 ## Usage
@@ -155,11 +155,23 @@ params_resolution.setJetPt(pt)
 params_resolution.setRho(rho)
 print("CMSSW result: {}".format(jerobj.getResolution(params_resolution)))
 
-
-#JSON (JER scale factor)
+#JSON (JER resolution)
 sf=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)]
 print([input.name for input in sf.inputs])
-print("JSON result: {}".format(sf.evaluate(*[eta,pt,rho])))
+print("JSON result: {}".format(sf.evaluate(eta,pt,rho)))
+
+
+
+print("\n\n JER Smearing (JSON only):\n==============")
+event_id = 999
+jecFactor = cset.compound["{}_{}_{}".format(jec, "L1L2L3Res", algo)].evaluate(area,eta,pt,rho)
+pt_jec = pt * jecFactor
+jerpt=cset["{}_{}_{}".format(jer, ResolutionChoice, algo)].evaluate(eta,pt,rho)
+ptgen = pt_gen if abs(pt_jec - pt_gen) < 3*pt_jec*jerpt else -1.0
+jersf = cset["{}_ScaleFactor_{}".format(jer, algo)].evaluate(eta,syst)
+jersmear = cset["JERSmear"].evaluate(pt_jec, eta, ptgen, rho, event_id, jerpt, jersf)
+pt_final = pt_jec * jersmear
+print("ptraw: {:.2f}; pt_jec: {:.2f}; pt_final: {:.2f}; pt_gen: {:.2f}".format(pt,pt_jec,pt_final,pt_gen))
 ```
 
 
@@ -168,8 +180,13 @@ print("JSON result: {}".format(sf.evaluate(*[eta,pt,rho])))
 - Small inconsistency for JR-factors at (eta) bin edges due to inconistent handling (JEC and JSON uniform vs. JR code including lower and upper edge of bins). Addressed in a PR to CMSSW (https://github.com/cms-sw/cmssw/pull/36759)
 - Single vs. double floating point precision related differences in JEC-calculation (CMSSW JetCorrectorParameters uses C-floats) - differences generally very small
 - correctionlib doesn't support TMath::XXX namespace. Currently only implemented replacement for "TMath::Log/Power/Max"-->"log/pow/max", but there are other occurences of TMath in [very] old JEC txt-files. More replacements can be added as the conversion happens and TMath::XXX shouldgenerally be avoided in new JEC txt files.
+
 ## Possible next improvements
 - Uncertainty sources takes up a lot of space. Needs formularef to emulate uncertainty-code interpolation for each pt/eta-bin + many sources. Close to 50MB for all sources when JSON not compressed
 - Use formularef also for regular JEC, if applicable
+
+## Recent updates 
+- 11/2022: Add regrouped uncertainty sources
+- 03/2023: Add generic JERSmear functionality to existing JSONs
 
 
