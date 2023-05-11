@@ -13,7 +13,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("inputTXT", help = "base name of JER txt-files (e.g. Summer20UL16_JRV3_MC); Pt/Eta/PhiRes and SFs will be merged into a single JSON file")
 parser.add_argument("-o", "--Output", help = "define path for output JSON (default: input path + \"_\" + algotype + \".json\")")
 parser.add_argument("-a", "--AlgoType", default="AK4PFchs", help = "define jet type for which JSON is created")
-parser.add_argument("-l", "--ExtraLoggingLevel", default="INFO", help = "choose level of additional logging file (default INFO; other useful choices: DEBUG)")args = parser.parse_args()
+parser.add_argument("-l", "--ExtraLoggingLevel", default="INFO", help = "choose level of additional logging file (default INFO; other useful choices: DEBUG)")
+args = parser.parse_args()
 baseInputName = os.path.basename(args.inputTXT)
 
 h1 = logging.FileHandler("WarningsAndErrors_JSONConversion.log"); h1.setLevel(logging.WARNING)
@@ -63,8 +64,7 @@ for idx,JECParams in enumerate(JECParamsIndiv):
      for i in range(0,JECParams.definitions().nBinVar()): inputsneeded.add(JECParams.definitions().binVar(i)) 
      inputsneeded = list(sorted(inputsneeded))
      inputsAllLevels.update(inputsneeded)
-     #if 
-     logging.info("Inputs needed for binning and formula evaluation: ", inputsneeded)
+     logging.info("Inputs needed for binning and formula evaluation: %s",inputsneeded) 
      parsedCorrections.append(getIndivCorrectionLevel(JECParams,inputsneeded,resolutionLevels[idx],baseInputName, args.AlgoType))
 
 inputsAllLevels = list(sorted(inputsAllLevels))

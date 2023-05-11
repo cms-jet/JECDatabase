@@ -318,3 +318,74 @@ def testCMSSWVsCorrectionlib(correctionInputs,CMSSWcorrector,libcorrector,testVa
             file_object.write("reldifferences max: {}; median: {}; mean: {}; stddev: {}; N: {}".format(max(reldifferences), median(reldifferences), mean(reldifferences),stdev(reldifferences), len(reldifferences)))
 
 
+
+def createJSONForJERSmearingFunctionality():
+    # including JER-smearing snippet implementation by Nick to enable JER-smearing from within correctionlib: 
+    # https://github.com/cms-nanoAOD/correctionlib/issues/130
+    res = Correction.parse_obj(
+        {
+            "name": "JERSmear",
+            "description": "Jet smearing tool",
+            "inputs": [
+                {"name": "JetPt", "type": "real"},
+                {"name": "JetEta", "type": "real"},
+                {"name": "GenPt", "type": "real", "description": "matched GenJet pt, or -1 if no match"},
+                {"name": "Rho", "type": "real", "description": "entropy source"},
+                {"name": "EventID", "type": "int", "description": "entropy source"},
+                {"name": "JER", "type": "real", "description": "Jet energy resolution"},
+                {"name": "JERsf", "type": "real", "description": "Jet energy resolution scale factor"},
+            ],
+            "output": {"name": "smear", "type": "real"},
+            "version": 1,
+            "data": {
+                "nodetype": "binning",
+                "input": "GenPt",
+                "edges": [-1, 0, 1],
+                "flow": "clamp",
+                "content": [
+                    # stochastic
+                    {
+                        # rewrite gen_pt with a random gaussian
+                        "nodetype": "transform",
+                        "input": "GenPt",
+                        "rule": {
+                            "nodetype": "hashprng",
+                            "inputs": ["JetPt", "JetEta", "Rho", "EventID"],
+                            "distribution": "normal",
+                        },
+                        "content": {
+                            "nodetype": "formula",
+                            # TODO min jet pt?
+                            "expression": "1+sqrt(max(x*x - 1, 0)) * y * z",
+                            "parser": "TFormula",
+                            # now gen_pt is actually the output of hashprng
+                            "variables": ["JERsf", "JER", "GenPt"],
+                        },
+                    },
+                    # deterministic
+                    {
+                        "nodetype": "formula",
+                        # TODO min jet pt?
+                        "expression": "1+(x-1)*(y-z)/y",
+                        "parser": "TFormula",
+                        "variables": ["JERsf", "JetPt", "GenPt"],
+                    },
+                ],
+            },
+        }
+    )
+    from correctionlib.schemav2 import CorrectionSet
+    import gzip
+    cset = CorrectionSet.parse_obj({
+        "schema_version": 2,
+        "corrections": [res],
+    })
+    output="JERSmear.json"
+    
+    with open(output, "w") as fout:
+        fout.write(cset.json(exclude_unset=True, indent=4))
+    
+    with gzip.open("{}.gz".format(output), "wt") as fout:
+        fout.write(cset.json(exclude_unset=True))
+    logging.info("Wrote generic JERSmearing correction json to be merged into combination jsons for individual years: %s",output)
+
