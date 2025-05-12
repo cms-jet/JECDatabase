@@ -1,3 +1,9 @@
+
+#---------------------------------------------------
+# conddb --db Winter25Prompt25_V1_MC.db search Jet
+# conddb --db Winter25Prompt25_V1_MC.db dump PAYLOADNAME
+#---------------------------------------------------
+
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("myprocess")
@@ -16,8 +22,8 @@ process.jec = cms.ESSource("PoolDBESSource",
   toGet = cms.VPSet(
     cms.PSet(
         record = cms.string('JetCorrectionsRecord'),
-        tag    = cms.string('JetCorrectorParametersCollection_Winter25Prompt25_V1_MC_AK4PFPuppi'),
-        label  = cms.untracked.string('AK4PFPuppi')
+        tag    = cms.string('JetCorrectorParametersCollection_Winter25Prompt25_V1_MC_AK8PFPuppi'),
+        label  = cms.untracked.string('AK8PFPuppi')
       ),
   ),
   connect = cms.string('sqlite:Winter25Prompt25_V1_MC.db')
@@ -25,7 +31,7 @@ process.jec = cms.ESSource("PoolDBESSource",
 process.es_prefer_jec = cms.ESPrefer("PoolDBESSource","jec")
 
 process.demo1 = cms.EDAnalyzer('JetCorrectorDBReader',
-  payloadName    = cms.untracked.string('AK4PFPuppi'),
+  payloadName    = cms.untracked.string('AK8PFPuppi'),
   printScreen    = cms.untracked.bool(True),
   createTextFile = cms.untracked.bool(False),
   globalTag      = cms.untracked.string('')# What is this for?
