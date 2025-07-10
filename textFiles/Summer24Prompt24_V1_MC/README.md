@@ -7,7 +7,7 @@ The simulated response (MC truth) corrections for DATA and MC (`L2Relative`)  ar
 
 The residual corrections for DATA (`L2Residual` and `L2L3Residual`) are based on `V9M` from [2].
 
-[1] https://indico.cern.ch/event/1545816/#36-l2rel-for-winter25<br />
+[1] https://indico.cern.ch/event/1543095/#33-updated-summer24-mc-truth<br />
 [2] https://indico.cern.ch/event/1552944/#36-first-look-into-2025-data-g<br />
 
 ### Notes
