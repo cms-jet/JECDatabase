@@ -5,10 +5,11 @@ The corrections should be applied to `Summer24' MC samples and Reprocessed EraCD
 
 The simulated response (MC truth) corrections for DATA and MC (`L2Relative`)  are based on the studies presented in [1].
 
-The residual corrections for DATA (`L2Residual` and `L2L3Residual`) are based on `V9M` from [2].
+The residual corrections for DATA (`L2Residual` and `L2L3Residual`) are based on `V9M` from [2-3].
 
 [1] https://indico.cern.ch/event/1543095/#33-updated-summer24-mc-truth<br />
-[2] https://indico.cern.ch/event/1552944/#36-first-look-into-2025-data-g<br />
+[2] https://indico.cern.ch/event/1545816/#35-l2l3res-v9m-24cde-re-reco-s
+[3] https://indico.cern.ch/event/1552944/#36-first-look-into-2025-data-g<br />
 
 ### Notes
 
