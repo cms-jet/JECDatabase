@@ -1,3 +1,1 @@
-{1  JetEta  1  JetPt  1  Correction  L3Absolute}
--5.191  5.191  2  1  10000
-
+../Summer22_22Sep2023_V2_MC/Summer22_22Sep2023_V2_MC_L3Absolute_AK4PFPuppi.txt

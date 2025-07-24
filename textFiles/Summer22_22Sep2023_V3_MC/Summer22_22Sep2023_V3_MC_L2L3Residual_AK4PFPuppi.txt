@@ -1,3 +1,1 @@
-{1  JetEta  1  JetPt  1  Correction  L2Relative}
--5.191  5.191  2  4  5000
-
+../Summer22_22Sep2023_V2_MC/Summer22_22Sep2023_V2_MC_L2L3Residual_AK4PFPuppi.txt
