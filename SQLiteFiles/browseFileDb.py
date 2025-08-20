@@ -22,11 +22,11 @@ process.jec = cms.ESSource("PoolDBESSource",
   toGet = cms.VPSet(
     cms.PSet(
         record = cms.string('JetCorrectionsRecord'),
-        tag    = cms.string('JetCorrectorParametersCollection_Summer24Prompt24_RunHnib1_V1_DATA_AK4PFPuppi'),
+        tag    = cms.string('JetCorrectorParametersCollection_Summer23BPixPrompt23_RunD_V2xHFscale_DATA_AK4PFPuppi'),
         label  = cms.untracked.string('AK4PFPuppi')
       ),
   ),
-  connect = cms.string('sqlite:Summer24Prompt24_RunHnib1_V1_DATA.db')
+  connect = cms.string('sqlite:Summer23BPixPrompt23_RunD_V2xHFscale_DATA.db')
 )
 process.es_prefer_jec = cms.ESPrefer("PoolDBESSource","jec")
 
