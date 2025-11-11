@@ -1,1 +1,0 @@
-../Summer23_Prompt2023_V3_MC/Summer23_Prompt2023_V3_MC_L2L3Residual_AK4PFPuppiPNetRegression.txt
