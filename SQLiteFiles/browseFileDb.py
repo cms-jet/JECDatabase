@@ -22,16 +22,16 @@ process.jec = cms.ESSource("PoolDBESSource",
   toGet = cms.VPSet(
     cms.PSet(
         record = cms.string('JetCorrectionsRecord'),
-        tag    = cms.string('JetCorrectorParametersCollection_Summer20UL18_FastSim_V1_MC_AK4PFchs'),
-        label  = cms.untracked.string('AK4PFchs')
+        tag    = cms.string('JetCorrectorParametersCollection_Summer24Prompt24_RunFnib3_V2_DATA_AK8PFPuppi'),
+        label  = cms.untracked.string('AK8PFPuppi')
       ),
   ),
-  connect = cms.string('sqlite:Summer20UL18_FastSim_V1_MC.db')
+  connect = cms.string('sqlite:Summer24Prompt24_RunFnib3_V2_DATA.db')
 )
 process.es_prefer_jec = cms.ESPrefer("PoolDBESSource","jec")
 
 process.demo1 = cms.EDAnalyzer('JetCorrectorDBReader',
-  payloadName    = cms.untracked.string('AK4PFchs'),
+  payloadName    = cms.untracked.string('AK8PFPuppi'),
   printScreen    = cms.untracked.bool(True),
   createTextFile = cms.untracked.bool(False),
   globalTag      = cms.untracked.string('')# What is this for?
