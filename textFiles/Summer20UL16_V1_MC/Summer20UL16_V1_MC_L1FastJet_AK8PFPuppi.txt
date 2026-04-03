@@ -1,2 +1,1 @@
-{1 JetEta 3 Rho JetPt JetA 1 Correction L1FastJet}
--5.191     5.191         6           0         200          10        3000           0          10
+../Summer19UL16_V7_MC/Summer19UL16_V7_MC_L1FastJet_AK8PFPuppi.txt
